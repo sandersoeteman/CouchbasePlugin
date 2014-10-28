@@ -49,6 +49,7 @@
 
 
     <source-file framework="true" src="lib/ios/CouchbaseLite.framework/CouchbaseLite"/>
+    <source-file framework="true" src="lib/ios/CouchbaseLiteListener.framework//CouchbaseLiteListener"/>
     
     <header-file src="lib/ios/CouchbaseLite.framework/Headers/CBLAttachment.h"/>
     <header-file src="lib/ios/CouchbaseLite.framework/Headers/CBLAuthenticator.h"/>
@@ -72,10 +73,9 @@
     <header-file src="lib/ios/CouchbaseLite.framework/PrivateHeaders/CBLReplication+Transformation.h"/>
     <header-file src="lib/ios/CouchbaseLite.framework/PrivateHeaders/CBLStatus.h"/>
     <header-file src="lib/ios/CouchbaseLite.framework/PrivateHeaders/CouchbaseLitePrivate.h"/>
-
     <resource-file src="lib/ios/CouchbaseLite.framework/Info.plist"/>
     
-
+    <header-file src="lib/ios/CouchbaseLiteListener.framework//Headers/CBLListener.h"/>
 
     <header-file src="src/ios/PlanbordCouch.h" />
     <source-file src="src/ios/PlanbordCouch.m" />
