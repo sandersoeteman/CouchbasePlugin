@@ -7,7 +7,7 @@
 //
 
 #import "PlanbordCouch.h"
-#import "AppDelegate.h"
+#import "TouchDBController.h"
 
 @implementation PlanbordCouch
 
