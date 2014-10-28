@@ -1,46 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugin xmlns="http://www.phonegap.com/ns/plugins/1.0"
-    id="com.appgyver.plugin.Echo"
+    id="net.pictoplanner.plugin.PlanbordCouch"
     version="1.0.0">
 
-    <name>EchoPlugin</name>
+    <name>PlanbordCouchPlugin</name>
 
   <description>
-    Echo Plugin for Steroids.js
+    PlanbordCouch Plugin for Steroids.js
   </description>
 
-  <asset src="www/EchoPlugin.js" target="plugins/EchoPlugin.js" />
+  <asset src="www/PlanbordCouchPlugin.js" target="plugins/PlanbordCouchPlugin.js" />
 
   <engines>
     <engine name="cordova" version=">=2.7.0" />
   </engines>
 
   <!-- android -->
-  <platform name="android">
+  <!-- <platform name="android">
     <config-file target="res/xml/config.xml" parent="plugins">
       <plugin name="Echo" value="com.appgyver.plugin.Echo"/>
     </config-file>
 
     <source-file src="src/android/com/appgyver/plugin/Echo.java"
       target-dir="src/com/appgyver/plugin" />
-  </platform>
+  </platform> -->
 
   <!-- ios -->
   <platform name="ios">
     <config-file target="config.xml" parent="/*/plugins">
-      <plugin name="Echo" value="Echo" onload="true" />
+      <plugin name="PlanbordCouch" value="PlanbordCouch" onload="true" />
     </config-file>
 
     <config-file target="config.xml" parent="/widget">
-      <feature name="Echo">
-        <param name="ios-package" value="Echo"/>
+      <feature name="PlanbordCouch">
+        <param name="ios-package" value="PlanbordCouch"/>
         <param name="onload" value="true" />
       </feature>
     </config-file>
 
-    <header-file src="src/ios/Echo.h" />
-
-    <source-file src="src/ios/Echo.m" />
+    <header-file src="src/ios/PlanbordCouch.h" />
+    <source-file src="src/ios/PlanbordCouch.m" />
 
   </platform>
 </plugin>
