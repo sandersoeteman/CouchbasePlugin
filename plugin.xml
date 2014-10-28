@@ -92,6 +92,5 @@
     <header-file src="src/ios/SSKeychainQuery.h" />
     <source-file src="src/ios/SSKeychainQuery.m" />
 
-    <dependency id="com.couchbase.couchbase-lite-ios" url="https://github.com/couchbase/couchbase-lite-ios.git" commit="decb569be18d29a8431244c5d7de33f94292657e" />
   </platform>
 </plugin>
