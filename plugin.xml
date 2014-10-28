@@ -48,7 +48,7 @@
     <framework src="SystemConfiguration.framework"/>
 
 
-    <source-file framework="true" src="ib/ios/CouchbaseLite.framework/CouchbaseLite"/>
+    <source-file framework="true" src="lib/ios/CouchbaseLite.framework/CouchbaseLite"/>
     
     <header-file src="lib/ios/CouchbaseLite.framework/Headers/CBLAttachment.h"/>
     <header-file src="lib/ios/CouchbaseLite.framework/Headers/CBLAuthenticator.h"/>
