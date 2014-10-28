@@ -41,5 +41,16 @@
     <header-file src="src/ios/PlanbordCouch.h" />
     <source-file src="src/ios/PlanbordCouch.m" />
 
+    <header-file src="src/ios/TouchDBController.h" />
+    <source-file src="src/ios/TouchDBController.m" />
+
+    <header-file src="src/ios/QueryResult.h" />
+    <source-file src="src/ios/QueryResult.m" />
+
+    <header-file src="src/ios/SSKeychain.h" />
+    <source-file src="src/ios/SSKeychain.m" />
+
+    <header-file src="src/ios/SSKeychainQuery.h" />
+    <source-file src="src/ios/SSKeychainQuery.m" />
   </platform>
 </plugin>

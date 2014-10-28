@@ -9,10 +9,6 @@
 #import "TouchDBController.h"
 
 #import <CouchbaseLite/CouchbaseLite.h>
-#import <CouchbaseLiteListener/CBLListener.h>
-#import <Crashlytics/Crashlytics.h>
-#import "AppDelegate.h"
-
 #import <Security/Security.h>
 #import "SSKeychain.h"
 #import "SSKeychainQuery.h"
@@ -351,9 +347,6 @@ NSString * const serviceName = @"Pictoplanner login";
     NSNumberFormatter* f = [[NSNumberFormatter alloc] init];
     [f setNumberStyle:NSNumberFormatterDecimalStyle];
     
-    // crashlytics vertellen welke gebruiker dit is
-    [[Crashlytics sharedInstance] setUserIdentifier:username];
-
     NSString* planningDBName = [NSString stringWithFormat:@"planning_%@", username];
     NSString* imagesDBName = [NSString stringWithFormat:@"images_%@", username];
     
