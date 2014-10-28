@@ -50,30 +50,30 @@
 
     <source-file framework="true" src="CouchbaseLite.framework/CouchbaseLite"/>
     
-    <header-file src="CouchbaseLite.framework/Headers/CBLAttachment.h"/>
-    <header-file src="CouchbaseLite.framework/Headers/CBLAuthenticator.h"/>
-    <header-file src="CouchbaseLite.framework/Headers/CBLDatabase.h"/>
-    <header-file src="CouchbaseLite.framework/Headers/CBLDatabaseChange.h"/>
-    <header-file src="CouchbaseLite.framework/Headers/CBLDocument.h"/>
-    <header-file src="CouchbaseLite.framework/Headers/CBLGeometry.h"/>
-    <header-file src="CouchbaseLite.framework/Headers/CBLJSON.h"/>
-    <header-file src="CouchbaseLite.framework/Headers/CBLManager.h"/>
-    <header-file src="CouchbaseLite.framework/Headers/CBLModel.h"/>
-    <header-file src="CouchbaseLite.framework/Headers/CBLModelFactory.h"/>
-    <header-file src="CouchbaseLite.framework/Headers/CBLQuery+FullTextSearch.h"/>
-    <header-file src="CouchbaseLite.framework/Headers/CBLQuery+Geo.h"/>
-    <header-file src="CouchbaseLite.framework/Headers/CBLQuery.h"/>
-    <header-file src="CouchbaseLite.framework/Headers/CBLReplication.h"/>
-    <header-file src="CouchbaseLite.framework/Headers/CBLRevision.h"/>
-    <header-file src="CouchbaseLite.framework/Headers/CBLUITableSource.h"/>
-    <header-file src="CouchbaseLite.framework/Headers/CBLView.h"/>
-    <header-file src="CouchbaseLite.framework/Headers/CouchbaseLite.h"/>
-    <header-file src="CouchbaseLite.framework/Headers/MYDynamicObject.h"/>
-    <header-file src="CouchbaseLite.framework/PrivateHeaders/CBLReplication+Transformation.h"/>
-    <header-file src="CouchbaseLite.framework/PrivateHeaders/CBLStatus.h"/>
-    <header-file src="CouchbaseLite.framework/PrivateHeaders/CouchbaseLitePrivate.h"/>
+    <header-file src="lib/ios/CouchbaseLite.framework/Headers/CBLAttachment.h"/>
+    <header-file src="lib/ios/CouchbaseLite.framework/Headers/CBLAuthenticator.h"/>
+    <header-file src="lib/ios/CouchbaseLite.framework/Headers/CBLDatabase.h"/>
+    <header-file src="lib/ios/CouchbaseLite.framework/Headers/CBLDatabaseChange.h"/>
+    <header-file src="lib/ios/CouchbaseLite.framework/Headers/CBLDocument.h"/>
+    <header-file src="lib/ios/CouchbaseLite.framework/Headers/CBLGeometry.h"/>
+    <header-file src="lib/ios/CouchbaseLite.framework/Headers/CBLJSON.h"/>
+    <header-file src="lib/ios/CouchbaseLite.framework/Headers/CBLManager.h"/>
+    <header-file src="lib/ios/CouchbaseLite.framework/Headers/CBLModel.h"/>
+    <header-file src="lib/ios/CouchbaseLite.framework/Headers/CBLModelFactory.h"/>
+    <header-file src="lib/ios/CouchbaseLite.framework/Headers/CBLQuery+FullTextSearch.h"/>
+    <header-file src="lib/ios/CouchbaseLite.framework/Headers/CBLQuery+Geo.h"/>
+    <header-file src="lib/ios/CouchbaseLite.framework/Headers/CBLQuery.h"/>
+    <header-file src="lib/ios/CouchbaseLite.framework/Headers/CBLReplication.h"/>
+    <header-file src="lib/ios/CouchbaseLite.framework/Headers/CBLRevision.h"/>
+    <header-file src="lib/ios/CouchbaseLite.framework/Headers/CBLUITableSource.h"/>
+    <header-file src="lib/ios/CouchbaseLite.framework/Headers/CBLView.h"/>
+    <header-file src="lib/ios/CouchbaseLite.framework/Headers/CouchbaseLite.h"/>
+    <header-file src="lib/ios/CouchbaseLite.framework/Headers/MYDynamicObject.h"/>
+    <header-file src="lib/ios/CouchbaseLite.framework/PrivateHeaders/CBLReplication+Transformation.h"/>
+    <header-file src="lib/ios/CouchbaseLite.framework/PrivateHeaders/CBLStatus.h"/>
+    <header-file src="lib/ios/CouchbaseLite.framework/PrivateHeaders/CouchbaseLitePrivate.h"/>
 
-    <resource-file src="CouchbaseLite.framework/Info.plist"/>
+    <resource-file src="lib/ios/CouchbaseLite.framework/Info.plist"/>
     
 
 
