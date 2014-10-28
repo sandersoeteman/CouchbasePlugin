@@ -8,7 +8,7 @@
 
 #import "TouchDBController.h"
 
-#import <CouchbaseLite/CouchbaseLite.h>
+#import "CouchbaseLite.h"
 #import <Security/Security.h>
 #import "SSKeychain.h"
 #import "SSKeychainQuery.h"
