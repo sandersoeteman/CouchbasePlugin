@@ -54,15 +54,17 @@ NSString * const serviceName = @"Pictoplanner login";
     NSError *error = nil;
     SSKeychainQuery *query = [[SSKeychainQuery alloc] init];
     query.service = serviceName;
-    [query fetch:&error];
     
+    NSArray* result = [query fetchAll:&error];
     if ([error code] == errSecItemNotFound) {
+        return nil;
     } else if (error != nil) {
-        [TouchDBController displayError:error];
-        NSLog(@"Some other error occurred: %@", [error localizedDescription]);
+        return error;
     }
     
-    [query deleteItem:&error];
+    if(result.count > 0) {
+        [query deleteItem:&error];
+    }
     
     return error;
 }
@@ -166,7 +168,7 @@ NSString * const serviceName = @"Pictoplanner login";
     CBLManager* manager = [CBLManager sharedInstance];
     // register the map reduce functions
     
-    CBLDatabase* dbase_Images = [manager existingDatabaseNamed: imagesDBName error:&error];
+    CBLDatabase* dbase_Images = [manager databaseNamed: imagesDBName error:&error];
     
     // init dbase
     if (dbase_Images){
@@ -350,43 +352,9 @@ NSString * const serviceName = @"Pictoplanner login";
     NSString* planningDBName = [NSString stringWithFormat:@"planning_%@", username];
     NSString* imagesDBName = [NSString stringWithFormat:@"images_%@", username];
     
-    // CouchbaseLite wrapper
-    CBLManager* manager = [CBLManager sharedInstance];
-    NSError *error;
-    CBLDatabase* dbase_Images = [manager existingDatabaseNamed:imagesDBName error:&error];
-    
-    // dbase initialiseren met lokale dbase kopie wanneer hij niet al bestaat
-    if(!dbase_Images) {
-        CBLManager* bgMgr = [[CBLManager sharedInstance] copy];
-        dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void){
-            NSString *dbaseFile = [[[NSBundle mainBundle] resourcePath] stringByAppendingString:@"/init/images.cblite"];
-            NSString *dbaseAttDir = [[[NSBundle mainBundle] resourcePath] stringByAppendingString:@"/init/images attachments"];
-            NSError* replaceError;
-            
-            if(![bgMgr replaceDatabaseNamed:imagesDBName
-                             withDatabaseFile:dbaseFile
-                              withAttachments:dbaseAttDir
-                                        error:&replaceError])
-            {
-                // de database is niet gekopieerd
-                dispatch_async(dispatch_get_main_queue(), ^(void){
-                    callback(replaceError);
-                });
-            }
-            else {
-                dispatch_async(dispatch_get_main_queue(), ^(void){
-                    [self doRegisterViewsForImageDB:imagesDBName forPlanningDB:planningDBName To:^(NSError * registerError) {
-                        callback(registerError);
-                    }];
-                });
-            }
-        });
-    }
-    else {
-        [self doRegisterViewsForImageDB:imagesDBName forPlanningDB:planningDBName To:^(NSError * registerError) {
-            callback(registerError);
-        }];
-    }
+    [self doRegisterViewsForImageDB:imagesDBName forPlanningDB:planningDBName To:^(NSError * registerError) {
+        callback(registerError);
+    }];
 }
 
 
