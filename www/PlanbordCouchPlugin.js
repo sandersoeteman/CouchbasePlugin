@@ -1,5 +1,5 @@
 module.exports = {
-    call: function(methodName, paramArray) {
+    callMethod: function(methodName, paramArray) {
         return new Promise(function(resolve, reject) {
 
             if (typeof cordova === 'undefined' || !cordova.exec) {
