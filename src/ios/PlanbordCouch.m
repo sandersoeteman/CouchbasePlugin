@@ -52,22 +52,6 @@
 }
 
 
-- (void) getUsername:(CDVInvokedUrlCommand*)command
-{
-    CDVPluginResult* pluginResult = nil;
-    
-    @try {
-        NSString* username = [TouchDBController getUsername];
-        pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:username];
-    }
-    @catch (NSException* exception) {
-        pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_JSON_EXCEPTION messageAsString:[exception reason]];
-    }
-    
-    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
-}
-
-
 
 // maakt de userData database aan met zijn views en repliceert deze met de server
 - (void) setupUser:(CDVInvokedUrlCommand*)command
