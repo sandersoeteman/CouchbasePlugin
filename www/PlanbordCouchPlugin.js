@@ -1,26 +1,23 @@
-window.couch = function(methodName, paramArray, fnSuccess, fnError, context) {
-	context = context || window;
+module.exports = {
+    couch: function(methodName, paramArray) {
+    	return new Promise(function(resolve, reject) {
 
-	if (typeof cordova === 'undefined' || !cordova.exec) {
-		console.log('CORDOVA TEST CONFIG. Calling CouchDB with ' + paramArray); 
-	}
-	else {
-		cordova.exec(
-            function (result) {
-            	if(fnSuccess) {
-                	fnSuccess.call(context, result);
-                }
-            },
-            function (err) { 
-            	console.log('cordova error');
-            	console.log(err);
-            	if(fnError) {
-                    fnError.call(context, err);
-                }
-            },
-            'PlanbordCouch',
-            methodName,
-            paramArray
-        );
-	}
-};
+            if (typeof cordova === 'undefined' || !cordova.exec) {
+                reject(Error('Cordova undefined')); 
+            }
+            else {
+                cordova.exec(
+                    function (result) {
+                        resolve(result);
+                    },
+                    function (err) { 
+                        reject(Error(err));
+                    },
+                    'PlanbordCouch',
+                    methodName,
+                    paramArray
+                );
+            }
+        };
+    }
+}
