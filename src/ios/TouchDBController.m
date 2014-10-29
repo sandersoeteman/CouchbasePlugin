@@ -30,8 +30,10 @@ NSString * const serviceName = @"Pictoplanner login";
 + (NSError*) saveUsername:(NSString *)username withPassword:(NSString *)password
 {
     NSError *error = nil;
-    [TouchDBController deleteAlAccounts];
-    [SSKeychain setPassword:password forService:serviceName account:username error:&error];
+    error = [TouchDBController deleteAlAccounts];
+    if(error == nil) {
+        [SSKeychain setPassword:password forService:serviceName account:username error:&error];
+    }
     return error;
 }
 
@@ -63,7 +65,12 @@ NSString * const serviceName = @"Pictoplanner login";
     }
     
     if(result.count > 0) {
-        [query deleteItem:&error];
+        NSEnumerator* e = [result objectEnumerator];
+        NSDictionary* dict;
+        while ((dict = [e nextObject]) && error == nil) {
+            query.account = [dict valueForKey: kSSKeychainAccountKey];
+            [query deleteItem:&error];
+        }
     }
     
     return error;

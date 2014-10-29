@@ -83,6 +83,7 @@
             
             if( password == nil || [password length] == 0) {
                 pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString: @"passwordNotFound"];
+                [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
             }
             else {
             
@@ -103,13 +104,13 @@
         }
         else {
             pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString: @"Niet het benodigde aantal argumenten ontvangen voor initialisatie Couch"];
+            [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
         }
     }
     @catch (NSException* exception) {
         pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_JSON_EXCEPTION messageAsString:[exception reason]];
+        [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
     }
-    
-    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
 
 
