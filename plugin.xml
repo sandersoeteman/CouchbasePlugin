@@ -9,9 +9,7 @@
     PlanbordCouch Plugin for Steroids.js
   </description>
 
-  <js-module src="www/PlanbordCouchPlugin.js" name="PlanbordCouch">
-    <clobbers target="window.couch" />
-  </js-module>
+  <asset src="www/PlanbordCouchPlugin.js" target="plugins/PlanbordCouchPlugin.js" />
 
   <engines>
     <engine name="cordova" version=">=3.0.0" />
