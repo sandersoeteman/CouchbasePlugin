@@ -19,6 +19,7 @@
 + (QueryResult*) getNextActivities:(int) count;
 + (NSError*) resaveHorizonActivities;
 
++ (NSString*) getUsername;
 + (NSString*) getPasswordFor:(NSString *)username;
 + (NSError*) saveUsername:(NSString *)username withPassword:(NSString *)password;
 
