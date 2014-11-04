@@ -10,7 +10,7 @@
   </description>
 
   <js-module src="www/PlanbordCouchPlugin.js" name="PlanbordCouch">
-    <clobbers target="couch" />
+    <clobbers target="planbord" />
   </js-module>
 
   <engines>
