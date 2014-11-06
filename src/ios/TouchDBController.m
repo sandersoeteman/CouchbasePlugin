@@ -105,6 +105,9 @@ NSString * const serviceName = @"Pictoplanner login";
     NSString *version =[[[NSBundle mainBundle] infoDictionary] valueForKey:@"CFBundleShortVersionString"];
     
     CBLManager *manager = [CBLManager sharedInstance];
+
+    // we roepen in appgyver vanaf http aan
+    [manager.customHTTPHeaders setObject:@"*" forKey:@"Access-Control-Allow-Origin"];
     
     // databases aanmaken wanneer ze niet al bestaan
     CBLDatabase* dbase_App = [manager databaseNamed: @"app"
