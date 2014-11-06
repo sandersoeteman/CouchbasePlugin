@@ -108,7 +108,9 @@ NSString * const serviceName = @"Pictoplanner login";
 
     // we roepen in appgyver vanaf http aan
     [manager.customHTTPHeaders setObject:@"*" forKey:@"Access-Control-Allow-Origin"];
-    
+    [manager.customHTTPHeaders setObject:@"Origin,X-Requested-With,Content-Type,Accept" forKey:@"Access-Control-Allow-Headers"];
+    [manager.customHTTPHeaders setObject:@"OPTIONS,GET,POST,PUT,DELETE" forKey:@"Access-Control-Allow-Methods"];
+
     // databases aanmaken wanneer ze niet al bestaan
     CBLDatabase* dbase_App = [manager databaseNamed: @"app"
                                               error: &error];
