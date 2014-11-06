@@ -14,10 +14,14 @@
 - (void) setupUser:(CDVInvokedUrlCommand*)command;
 - (void) setupReplicationForUser:(CDVInvokedUrlCommand*)command;
 - (void) stopReplications:(CDVInvokedUrlCommand*)command;
+
 - (void) saveUserCredentials:(CDVInvokedUrlCommand*)command;
 - (void) getUsername:(CDVInvokedUrlCommand*)command;
+- (void) deleteAlAccounts:(CDVInvokedUrlCommand*)command;
+
 - (void) makeNotifications:(CDVInvokedUrlCommand*)command;
 - (void) cancelNotifications:(CDVInvokedUrlCommand*)command;
+
 - (void) exit:(CDVInvokedUrlCommand*)command;
 
 @end
