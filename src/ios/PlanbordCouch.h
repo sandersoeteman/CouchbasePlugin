@@ -17,7 +17,7 @@
 
 - (void) saveUserCredentials:(CDVInvokedUrlCommand*)command;
 - (void) getUsername:(CDVInvokedUrlCommand*)command;
-- (void) deleteAlAccounts:(CDVInvokedUrlCommand*)command;
+- (void) deleteAllAccounts:(CDVInvokedUrlCommand*)command;
 
 - (void) makeNotifications:(CDVInvokedUrlCommand*)command;
 - (void) cancelNotifications:(CDVInvokedUrlCommand*)command;

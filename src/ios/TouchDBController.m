@@ -30,7 +30,7 @@ NSString * const serviceName = @"Pictoplanner login";
 + (NSError*) saveUsername:(NSString *)username withPassword:(NSString *)password
 {
     NSError *error = nil;
-    error = [TouchDBController deleteAlAccounts];
+    error = [TouchDBController deleteAllAccounts];
     if(error == nil) {
         [SSKeychain setPassword:password forService:serviceName account:username error:&error];
     }
@@ -51,7 +51,7 @@ NSString * const serviceName = @"Pictoplanner login";
 }
 
 
-+ (NSError*) deleteAlAccounts
++ (NSError*) deleteAllAccounts
 {
     NSError *error = nil;
     SSKeychainQuery *query = [[SSKeychainQuery alloc] init];
@@ -180,7 +180,7 @@ NSString * const serviceName = @"Pictoplanner login";
     CBLManager* manager = [CBLManager sharedInstance];
     // register the map reduce functions
     
-    CBLDatabase* dbase_Images = [manager databaseNamed: imagesDBName error:&error];
+    CBLDatabase* dbase_Images = [manager existingDatabaseNamed: imagesDBName error:&error];
     
     // init dbase
     if (dbase_Images){
@@ -268,9 +268,9 @@ NSString * const serviceName = @"Pictoplanner login";
                     NSArray* datums = [self getActivityDatesForDoc:doc];
                     NSEnumerator* d = [datums objectEnumerator];
                     NSString* datum;
-                    NSString* lastDatum = nil;
+                    NSString* lastDatumStr = nil;
                     while(datum = [d nextObject]) {
-                        lastDatum = datum;
+                        lastDatumStr = datum;
                         emit([NSArray arrayWithObjects:datum, nil], nil);
                     }
                     
@@ -278,9 +278,27 @@ NSString * const serviceName = @"Pictoplanner login";
                     // Bij notifications berekenen bekijken of dit nog binnen de horizon ligt
                     // herberekenen van de planning als voor alle documenten waarvoor geldt: "planningshorizon < vandaag + 1 jaar"
                     NSString* recurringType = castIf(NSString, [doc valueForKey:@"RecurringType"]);
-                    if (nil != lastDatum && ![recurringType isEqualToString:@"Geen_herhaling"])
+                    if (nil != lastDatumStr && ![recurringType isEqualToString:@"Geen_herhaling"])
                     {
-                        emit([NSArray arrayWithObjects:@"planningshorizon", lastDatum, nil], nil);
+                        //einddatum?
+                        NSString* recurringEndDateString = castIf(NSString, [doc valueForKey:@"RecurringEndDate"]);
+                        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+                        [dateFormatter setDateFormat:@"yyyy-MM-dd"];
+                        NSDate *recurringEndDate = [dateFormatter dateFromString:recurringEndDateString];
+                        NSDate* lastDatum = [dateFormatter dateFromString:lastDatumStr]; 
+                        
+                        // omdat lastdate altijd ten hoogste einddatum-1 kan zijn
+                        if(recurringEndDate != nil) {
+                            NSCalendar *gregorian = [[NSCalendar alloc]
+                                                     initWithCalendarIdentifier:NSGregorianCalendar];
+                            NSDateComponents *offsetComponent = [[NSDateComponents alloc] init];
+                            [offsetComponent setDay:-2];
+                            recurringEndDate = [gregorian dateByAddingComponents:offsetComponent toDate:recurringEndDate options:0];
+                        }
+                        
+                        if(recurringEndDate == nil || [lastDatum laterDate:recurringEndDate] == recurringEndDate) {
+                            emit([NSArray arrayWithObjects:@"planningshorizon", lastDatumStr, nil], nil);
+                        }
                     }
 
                 }
@@ -560,12 +578,15 @@ NSString * const serviceName = @"Pictoplanner login";
     CBLQueryEnumerator* rows = [query run:&error];
     CBLQueryRow* row;
     while((row = [rows nextRow])) {
-        // datum uit key halen
-        NSDate* date = [dateFormatter dateFromString:[row.key objectAtIndex:0]];
-        NSMutableDictionary* dict = [row.document.properties mutableCopy];
-        [dict setObject:date forKey:@"StartDatum"];
-        
-        [activities addObject:dict];
+        if([row.key isKindOfClass:[NSString class]]) {
+            // datum uit key halen
+            NSDate* date = [dateFormatter dateFromString:[row.key objectAtIndex:0]];
+            NSMutableDictionary* dict = [row.document.properties mutableCopy];
+            [dict setObject:date forKey:@"StartDatum"];
+            
+            [activities addObject:dict];
+        }
+
     }
     
     QueryResult* result = [[QueryResult alloc] init];
@@ -613,9 +634,36 @@ NSString * const serviceName = @"Pictoplanner login";
     CBLQueryEnumerator* rows = [query run:&error];
     CBLQueryRow* row;
     while((row = [rows nextRow])) {
+        NSLog(@"resaveHorizonActivity");
         // opnieuw opslaan document
-        NSMutableDictionary* props = [row.document.properties mutableCopy];
-        [row.document.currentRevision createRevisionWithProperties:props error: &error];
+        
+        CBLDocument* doc = row.document;
+        NSString* recurringType = [doc.properties valueForKey:@"RecurringType"];
+        
+        if ([recurringType isEqualToString:@"Jaarlijks"]) {
+            // datum uit key halen
+            NSArray* key = row.key;
+            NSString* dateStr = [key objectAtIndex:1];
+            NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+            [dateFormatter setDateFormat:@"yyyy-MM-dd"];
+            NSDate *horizonDate = [dateFormatter dateFromString:dateStr];
+            
+            // vandaag plus 5 maand
+            NSDateComponents *windowComp = [[NSDateComponents alloc] init];
+            [windowComp setMonth:5];
+            NSDate *window = [gregorian dateByAddingComponents:windowComp
+                                                         toDate:today options:0];
+            if([window laterDate:horizonDate] == window) {
+                NSLog(@"emitting...");
+                NSMutableDictionary* props = [doc.properties mutableCopy];
+                [doc.currentRevision createRevisionWithProperties:props error: &error];
+            }
+        }
+        else {
+            NSLog(@"emitting2...");
+            NSMutableDictionary* props = [doc.properties mutableCopy];
+            [doc.currentRevision createRevisionWithProperties:props error: &error];
+        }
     }
     
     return nil;

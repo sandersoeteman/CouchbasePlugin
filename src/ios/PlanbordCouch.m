@@ -68,12 +68,12 @@
 }
 
 
-- (void) deleteAlAccounts:(CDVInvokedUrlCommand*)command
+- (void) deleteAllAccounts:(CDVInvokedUrlCommand*)command
 {
     CDVPluginResult* pluginResult = nil;
     
     @try {
-        NSError* error = [TouchDBController deleteAlAccounts];
+        NSError* error = [TouchDBController deleteAllAccounts];
         if(error != nil) {
             [self displayError:error];
             pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:[error localizedDescription]];

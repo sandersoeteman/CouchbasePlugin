@@ -22,7 +22,7 @@
 + (NSString*) getUsername;
 + (NSString*) getPasswordFor:(NSString *)username;
 + (NSError*) saveUsername:(NSString *)username withPassword:(NSString *)password;
-+ (NSError*) deleteAlAccounts;
++ (NSError*) deleteAllAccounts;
 
 
 
