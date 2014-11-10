@@ -7,8 +7,11 @@
 //
 
 #import <Cordova/CDVPlugin.h>
+#import "TouchDBController.h"
 
 @interface PlanbordCouch : CDVPlugin
+
+@property (nonatomic, strong) TouchDBController *touchDB;
 
 - (void) setup:(CDVInvokedUrlCommand*)command;
 - (void) setupUser:(CDVInvokedUrlCommand*)command;

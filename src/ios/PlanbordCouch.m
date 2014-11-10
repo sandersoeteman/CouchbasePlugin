@@ -7,9 +7,16 @@
 //
 
 #import "PlanbordCouch.h"
-#import "TouchDBController.h"
 
 @implementation PlanbordCouch
+
+@synthesize touchDB;
+
+- (void)pluginInitialize
+{
+    self.touchDB = [[TouchDBController alloc] init];
+    [self.touchDB init];
+}
 
 
 -(id)cast:(Class)requiredClass forObject:(id)object
@@ -28,7 +35,7 @@
     
     @try {
         // TouchDB instance en listener aan laten maken
-        [TouchDBController doSetupto:^(NSString *couchDBServer, NSString *version, NSError *error) {
+        [touchDB doSetupto:^(NSString *couchDBServer, NSString *version, NSError *error) {
             CDVPluginResult* pluginResult;
             if(error != nil) {
                 [self displayError:error];
@@ -57,7 +64,7 @@
     CDVPluginResult* pluginResult = nil;
     
     @try {
-        NSString* username = [TouchDBController getUsername];
+        NSString* username = [touchDB getUsername];
         pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:username];
     }
     @catch (NSException* exception) {
@@ -73,7 +80,7 @@
     CDVPluginResult* pluginResult = nil;
     
     @try {
-        NSError* error = [TouchDBController deleteAllAccounts];
+        NSError* error = [touchDB deleteAllAccounts];
         if(error != nil) {
             [self displayError:error];
             pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:[error localizedDescription]];
@@ -104,7 +111,7 @@
         
         if (username != nil && [username length] > 0) {
             
-            NSString* password = [TouchDBController getPasswordFor:username];
+            NSString* password = [touchDB getPasswordFor:username];
             
             if( password == nil || [password length] == 0) {
                 pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString: @"passwordNotFound"];
@@ -113,7 +120,7 @@
             else {
             
                 // heavy lifting
-                [TouchDBController doSetupUser:username
+                [touchDB doSetupUser:username
                                    to:^(NSError *error) {
                     CDVPluginResult* pluginResult;
                     if(error != nil) {
@@ -156,7 +163,7 @@
         if (username != nil && [username length] > 0 &&
             password != nil && [password length] > 0) {
             
-            NSError* error = [TouchDBController saveUsername:username withPassword:password];
+            NSError* error = [touchDB saveUsername:username withPassword:password];
             if(error != nil) {
                 [self displayError:error];
                 pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:[error localizedDescription]];
@@ -182,7 +189,7 @@
     
     @try {
         NSString* username = [command.arguments objectAtIndex:0];
-        NSString* password = [TouchDBController getPasswordFor:username];
+        NSString* password = [touchDB getPasswordFor:username];
         NSString* server = [command.arguments objectAtIndex:1];
         NSArray* planningDBs = [command.arguments objectAtIndex:2];
         NSArray* imageDBs = [command.arguments objectAtIndex:3];
@@ -196,7 +203,7 @@
             imageDBs != nil && [imageDBs count] > 0) {
             
             // heavy lifting
-            [TouchDBController doSetupReplicationForUser:username
+            [touchDB doSetupReplicationForUser:username
                                                      andPassword:password
                                                         onServer:server
                                                 withPlanningDBs:planningDBs
@@ -221,7 +228,7 @@
     
     @try {
         // heavy lifting
-        [TouchDBController stopReplications];
+        [touchDB stopReplications];
         
         pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@""];
     }
@@ -241,7 +248,7 @@
     @try {
         [self cancelNotifications];
 
-        QueryResult* result = [TouchDBController getNextActivities:32];
+        QueryResult* result = [touchDB getNextActivities:32];
         
         if (result.error){
             pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_JSON_EXCEPTION messageAsString:[result.error localizedDescription]];
@@ -256,7 +263,7 @@
                 [self makeNotificationForActivity:act onDate:date];
             }
             
-            NSError* saveError = [TouchDBController resaveHorizonActivities];
+            NSError* saveError = [touchDB resaveHorizonActivities];
             if(saveError) {
                 pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_JSON_EXCEPTION messageAsString:[saveError localizedDescription]];
             }

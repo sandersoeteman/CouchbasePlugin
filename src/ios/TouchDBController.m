@@ -18,7 +18,7 @@
 
 NSString * const serviceName = @"Pictoplanner login";
 
-+ (id)cast:(Class)requiredClass forObject:(id)object
+- (id)cast:(Class)requiredClass forObject:(id)object
 {
     if( object && ! [object isKindOfClass: requiredClass] )
         object = nil;
@@ -27,10 +27,10 @@ NSString * const serviceName = @"Pictoplanner login";
 #define castIf(CLASSNAME,OBJ)      ((CLASSNAME*)([self cast:[CLASSNAME class] forObject:OBJ]))
 
 
-+ (NSError*) saveUsername:(NSString *)username withPassword:(NSString *)password
+- (NSError*) saveUsername:(NSString *)username withPassword:(NSString *)password
 {
     NSError *error = nil;
-    error = [TouchDBController deleteAllAccounts];
+    error = [self deleteAllAccounts];
     if(error == nil) {
         [SSKeychain setPassword:password forService:serviceName account:username error:&error];
     }
@@ -38,7 +38,7 @@ NSString * const serviceName = @"Pictoplanner login";
 }
 
 
-+ (NSString*) getUsername
+- (NSString*) getUsername
 {
     NSArray* accounts = [SSKeychain accountsForService:serviceName];
     
@@ -51,7 +51,7 @@ NSString * const serviceName = @"Pictoplanner login";
 }
 
 
-+ (NSError*) deleteAllAccounts
+- (NSError*) deleteAllAccounts
 {
     NSError *error = nil;
     SSKeychainQuery *query = [[SSKeychainQuery alloc] init];
@@ -77,7 +77,7 @@ NSString * const serviceName = @"Pictoplanner login";
 }
 
 
-+ (NSString*) getPasswordFor:(NSString *)username
+- (NSString*) getPasswordFor:(NSString *)username
 {
     NSError *error = nil;
     SSKeychainQuery *query = [[SSKeychainQuery alloc] init];
@@ -97,7 +97,7 @@ NSString * const serviceName = @"Pictoplanner login";
 
 
 // maakt de touchDB server aan en initialiseert de listener
-+ (void) doSetupto: (void (^)(NSString* couchDBServer, NSString* version, NSError* error))callback;
+- (void) doSetupto: (void (^)(NSString* couchDBServer, NSString* version, NSError* error))callback;
 {
     NSError *error;
     
@@ -168,13 +168,13 @@ NSString * const serviceName = @"Pictoplanner login";
 }
 
 
-+ (void) handleEnteredBackground:(UIApplication *)application
+- (void) handleEnteredBackground:(UIApplication *)application
 {
     [self compact];
 }
 
 
-+ (void) doRegisterViewsForImageDB: (NSString*) imagesDBName forPlanningDB:(NSString*) planningDBName To:(void (^)(NSError *))callback
+- (void) doRegisterViewsForImageDB: (NSString*) imagesDBName forPlanningDB:(NSString*) planningDBName To:(void (^)(NSError *))callback
 {
     NSError* error;
     CBLManager* manager = [CBLManager sharedInstance];
@@ -374,7 +374,7 @@ NSString * const serviceName = @"Pictoplanner login";
     }
 }
 
-+ (void) doSetupUser:(NSString *)username to:(void (^)(NSError *))callback
+- (void) doSetupUser:(NSString *)username to:(void (^)(NSError *))callback
 {
     NSNumberFormatter* f = [[NSNumberFormatter alloc] init];
     [f setNumberStyle:NSNumberFormatterDecimalStyle];
@@ -388,7 +388,7 @@ NSString * const serviceName = @"Pictoplanner login";
 }
 
 
-+ (NSError*) doSetupReplicationForUser:(NSString*)username andPassword:(NSString*)thePassword onServer:(NSString*) remoteServer withPlanningDBs:(NSArray*) planningDBs withImageDBs:(NSArray*) imageDBs
+- (NSError*) doSetupReplicationForUser:(NSString*)username andPassword:(NSString*)thePassword onServer:(NSString*) remoteServer withPlanningDBs:(NSArray*) planningDBs withImageDBs:(NSArray*) imageDBs
 {
     NSNumberFormatter* f = [[NSNumberFormatter alloc] init];
     [f setNumberStyle:NSNumberFormatterDecimalStyle];
@@ -488,7 +488,7 @@ NSString * const serviceName = @"Pictoplanner login";
 }
 
 
-+ (void) stopReplications
+- (void) stopReplications
 {
     CBLManager* manager = [CBLManager sharedInstance];
     
@@ -510,7 +510,7 @@ NSString * const serviceName = @"Pictoplanner login";
 }
 
 
-+ (void) compact
+- (void) compact
 {
     NSDate *today = [[NSDate alloc] init];
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
@@ -547,7 +547,7 @@ NSString * const serviceName = @"Pictoplanner login";
 
 
 
-+ (QueryResult*) getNextActivities:(int)count
+- (QueryResult*) getNextActivities:(int)count
 {
     NSMutableArray* activities = [[NSMutableArray alloc] init];
     // CouchbaseLite wrapper
@@ -596,7 +596,7 @@ NSString * const serviceName = @"Pictoplanner login";
 }
 
 
-+ (NSError*) resaveHorizonActivities
+- (NSError*) resaveHorizonActivities
 {
     // CouchbaseLite wrapper
     CBLManager* manager = [CBLManager sharedInstance];
@@ -669,7 +669,7 @@ NSString * const serviceName = @"Pictoplanner login";
     return nil;
 }
 
-+ (NSArray*) getDatesForDienstsoortDoc:(NSDictionary*) doc
+- (NSArray*) getDatesForDienstsoortDoc:(NSDictionary*) doc
 {
     NSMutableArray* dates = [[NSMutableArray alloc] init];
     
@@ -771,7 +771,7 @@ NSString * const serviceName = @"Pictoplanner login";
  */
 
 // retourneert een array met date strings
-+ (NSArray*) getActivityDatesForDoc:(NSDictionary*) doc
+- (NSArray*) getActivityDatesForDoc:(NSDictionary*) doc
 {
     NSMutableArray* dates = [[NSMutableArray alloc] init];
     
@@ -1024,7 +1024,7 @@ NSString * const serviceName = @"Pictoplanner login";
 }
 
 
-+ (BOOL) isIgnoredDate:(NSDate*) date inDoc:(NSDictionary*) doc
+- (BOOL) isIgnoredDate:(NSDate*) date inDoc:(NSDictionary*) doc
 {
     NSArray* datesToIgnoreArray = castIf(NSArray, [doc valueForKey:@"DatesToIgnore"]);
     if(datesToIgnoreArray == nil || [datesToIgnoreArray count] == 0) {
@@ -1048,7 +1048,7 @@ NSString * const serviceName = @"Pictoplanner login";
 }
 
 
-+ (NSString*) touchViewsForImageDB: (NSString*) imagesDBName forPlanningDB:(NSString*) planningDBName
+- (NSString*) touchViewsForImageDB: (NSString*) imagesDBName forPlanningDB:(NSString*) planningDBName
 {
     // CouchbaseLite wrapper
     CBLManager* manager = [CBLManager sharedInstance];
@@ -1099,7 +1099,7 @@ NSString * const serviceName = @"Pictoplanner login";
  Utility methods
  */
 
-+ (NSString*) GetServerPath
+- (NSString*) GetServerPath
 {
     NSString* bundleID = [[NSBundle mainBundle] bundleIdentifier];
     if (!bundleID)
@@ -1120,7 +1120,7 @@ NSString * const serviceName = @"Pictoplanner login";
     return path;
 }
 
-+ (void) displayError:(NSError*) error
+- (void) displayError:(NSError*) error
 {
     UIAlertView *errorAlert = [[UIAlertView alloc] initWithTitle:@"Error"
                                                          message:error.localizedDescription
