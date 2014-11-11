@@ -180,7 +180,7 @@ NSString * const serviceName = @"Pictoplanner login";
     CBLManager* manager = [CBLManager sharedInstance];
     // register the map reduce functions
     
-    CBLDatabase* dbase_Images = [manager existingDatabaseNamed: imagesDBName error:&error];
+    CBLDatabase* dbase_Images = [manager databaseNamed: imagesDBName error:&error];
     
     // init dbase
     if (dbase_Images){
