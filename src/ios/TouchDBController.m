@@ -157,20 +157,22 @@ NSString * const serviceName = @"Pictoplanner login";
         }
     }) version:[[[NSBundle mainBundle] infoDictionary] valueForKey:@"CFBundleVersion"]];
     
-    // compacten wanneer de app in de achtergrond terecht komt
-    [[NSNotificationCenter defaultCenter] addObserver: self
-                                             selector: @selector(handleEnteredBackground:)
-                                                 name: UIApplicationDidEnterBackgroundNotification
-                                               object: nil];
-       
+    
     // URL aan webview teruggeven
     callback([[manager internalURL] absoluteString], version, nil);
 }
 
 
-- (void) handleEnteredBackground:(UIApplication *)application
+- (void)applicationWillResignActive:(UIApplication *)application
 {
+    [self stopReplications];
     [self compact];
+}
+
+- (void)applicationWillEnterForeground:(UIApplication *)application
+{
+    
+    [self startReplications];
 }
 
 
@@ -507,6 +509,28 @@ NSString * const serviceName = @"Pictoplanner login";
             }
         }
     }    
+}
+
+
+- (void) startReplications
+{
+    CBLManager* manager = [CBLManager sharedInstance];
+    
+    // alle bestaande replications weggooien
+    NSArray* dbs = [manager allDatabaseNames];
+    NSEnumerator* dbEnum = [dbs objectEnumerator];
+    NSString* dbName;
+    NSError* error;
+    while(dbName = [dbEnum nextObject]) {
+        CBLDatabase* db = [manager existingDatabaseNamed:dbName error:&error];
+        if(db && db.allReplications != nil && [db.allReplications count] > 0) {
+            NSEnumerator* repEnum = [db.allReplications objectEnumerator];
+            CBLReplication* repl;
+            while(repl = [repEnum nextObject]) {
+                [repl start];
+            }
+        }
+    }
 }
 
 
