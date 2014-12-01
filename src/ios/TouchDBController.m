@@ -602,7 +602,7 @@ NSString * const serviceName = @"Pictoplanner login";
     CBLQueryEnumerator* rows = [query run:&error];
     CBLQueryRow* row;
     while((row = [rows nextRow])) {
-        if([row.key isKindOfClass:[NSString class]]) {
+        if([[row.key objectAtIndex:0] isKindOfClass:[NSString class]]) {
             // datum uit key halen
             NSDate* date = [dateFormatter dateFromString:[row.key objectAtIndex:0]];
             NSMutableDictionary* dict = [row.document.properties mutableCopy];
