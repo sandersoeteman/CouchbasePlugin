@@ -10,9 +10,8 @@ module.exports = {
                     function (result) {
                         resolve(result);
                     },
-                    function (err) {
-                        console.log('cordova error: ' err);
-                        reject(new Error(err));
+                    function (err) { 
+                        reject(Error(err));
                     },
                     'PlanbordCouch',
                     methodName,
