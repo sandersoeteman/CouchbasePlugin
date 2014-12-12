@@ -11,7 +11,7 @@ module.exports = {
                         resolve(result);
                     },
                     function (err) { 
-                        reject(Error(err));
+                        reject(new Error(err));
                     },
                     'PlanbordCouch',
                     methodName,
