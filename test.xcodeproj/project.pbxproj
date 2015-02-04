@@ -1,0 +1,415 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		5B26CA821A113D7000622334 /* libtest.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B26CA761A113D7000622334 /* libtest.dylib */; };
+		5B26CA9A1A113DE100622334 /* PlanbordCouch.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B26CA901A113DE100622334 /* PlanbordCouch.h */; };
+		5B26CA9B1A113DE100622334 /* PlanbordCouch.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B26CA911A113DE100622334 /* PlanbordCouch.m */; };
+		5B26CA9C1A113DE100622334 /* TouchDBController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B26CA921A113DE100622334 /* TouchDBController.h */; };
+		5B26CA9D1A113DE100622334 /* TouchDBController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B26CA931A113DE100622334 /* TouchDBController.m */; };
+		5B26CA9E1A113DE100622334 /* QueryResult.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B26CA941A113DE100622334 /* QueryResult.h */; };
+		5B26CA9F1A113DE100622334 /* QueryResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B26CA951A113DE100622334 /* QueryResult.m */; };
+		5B26CAA01A113DE100622334 /* SSKeychain.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B26CA961A113DE100622334 /* SSKeychain.h */; };
+		5B26CAA11A113DE100622334 /* SSKeychain.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B26CA971A113DE100622334 /* SSKeychain.m */; };
+		5B26CAA21A113DE100622334 /* SSKeychainQuery.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B26CA981A113DE100622334 /* SSKeychainQuery.h */; };
+		5B26CAA31A113DE100622334 /* SSKeychainQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B26CA991A113DE100622334 /* SSKeychainQuery.m */; };
+		5B26CAA61A113DF900622334 /* CouchbaseLite.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B26CAA41A113DF900622334 /* CouchbaseLite.framework */; };
+		5B26CAA71A113DF900622334 /* CouchbaseLiteListener.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B26CAA51A113DF900622334 /* CouchbaseLiteListener.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		5B26CA831A113D7000622334 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5B26CA6E1A113D7000622334 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 5B26CA751A113D7000622334;
+			remoteInfo = test;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		5B26CA761A113D7000622334 /* libtest.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libtest.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
+		5B26CA811A113D7000622334 /* testTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = testTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		5B26CA871A113D7000622334 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		5B26CA901A113DE100622334 /* PlanbordCouch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PlanbordCouch.h; path = src/ios/PlanbordCouch.h; sourceTree = "<group>"; };
+		5B26CA911A113DE100622334 /* PlanbordCouch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PlanbordCouch.m; path = src/ios/PlanbordCouch.m; sourceTree = "<group>"; };
+		5B26CA921A113DE100622334 /* TouchDBController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TouchDBController.h; path = src/ios/TouchDBController.h; sourceTree = "<group>"; };
+		5B26CA931A113DE100622334 /* TouchDBController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TouchDBController.m; path = src/ios/TouchDBController.m; sourceTree = "<group>"; };
+		5B26CA941A113DE100622334 /* QueryResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = QueryResult.h; path = src/ios/QueryResult.h; sourceTree = "<group>"; };
+		5B26CA951A113DE100622334 /* QueryResult.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = QueryResult.m; path = src/ios/QueryResult.m; sourceTree = "<group>"; };
+		5B26CA961A113DE100622334 /* SSKeychain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SSKeychain.h; path = src/ios/SSKeychain.h; sourceTree = "<group>"; };
+		5B26CA971A113DE100622334 /* SSKeychain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SSKeychain.m; path = src/ios/SSKeychain.m; sourceTree = "<group>"; };
+		5B26CA981A113DE100622334 /* SSKeychainQuery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SSKeychainQuery.h; path = src/ios/SSKeychainQuery.h; sourceTree = "<group>"; };
+		5B26CA991A113DE100622334 /* SSKeychainQuery.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SSKeychainQuery.m; path = src/ios/SSKeychainQuery.m; sourceTree = "<group>"; };
+		5B26CAA41A113DF900622334 /* CouchbaseLite.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CouchbaseLite.framework; path = lib/ios/CouchbaseLite.framework; sourceTree = "<group>"; };
+		5B26CAA51A113DF900622334 /* CouchbaseLiteListener.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CouchbaseLiteListener.framework; path = lib/ios/CouchbaseLiteListener.framework; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		5B26CA731A113D7000622334 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5B26CAA71A113DF900622334 /* CouchbaseLiteListener.framework in Frameworks */,
+				5B26CAA61A113DF900622334 /* CouchbaseLite.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5B26CA7E1A113D7000622334 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5B26CA821A113D7000622334 /* libtest.dylib in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		5B26CA6D1A113D7000622334 = {
+			isa = PBXGroup;
+			children = (
+				5B26CA901A113DE100622334 /* PlanbordCouch.h */,
+				5B26CA911A113DE100622334 /* PlanbordCouch.m */,
+				5B26CA921A113DE100622334 /* TouchDBController.h */,
+				5B26CA931A113DE100622334 /* TouchDBController.m */,
+				5B26CA941A113DE100622334 /* QueryResult.h */,
+				5B26CA951A113DE100622334 /* QueryResult.m */,
+				5B26CA961A113DE100622334 /* SSKeychain.h */,
+				5B26CA971A113DE100622334 /* SSKeychain.m */,
+				5B26CA981A113DE100622334 /* SSKeychainQuery.h */,
+				5B26CA991A113DE100622334 /* SSKeychainQuery.m */,
+				5B26CA851A113D7000622334 /* testTests */,
+				5B26CA771A113D7000622334 /* Products */,
+				5B26CAA41A113DF900622334 /* CouchbaseLite.framework */,
+				5B26CAA51A113DF900622334 /* CouchbaseLiteListener.framework */,
+			);
+			sourceTree = "<group>";
+		};
+		5B26CA771A113D7000622334 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				5B26CA761A113D7000622334 /* libtest.dylib */,
+				5B26CA811A113D7000622334 /* testTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		5B26CA851A113D7000622334 /* testTests */ = {
+			isa = PBXGroup;
+			children = (
+				5B26CA861A113D7000622334 /* Supporting Files */,
+			);
+			path = testTests;
+			sourceTree = "<group>";
+		};
+		5B26CA861A113D7000622334 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				5B26CA871A113D7000622334 /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		5B26CA741A113D7000622334 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5B26CAA01A113DE100622334 /* SSKeychain.h in Headers */,
+				5B26CAA21A113DE100622334 /* SSKeychainQuery.h in Headers */,
+				5B26CA9C1A113DE100622334 /* TouchDBController.h in Headers */,
+				5B26CA9E1A113DE100622334 /* QueryResult.h in Headers */,
+				5B26CA9A1A113DE100622334 /* PlanbordCouch.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		5B26CA751A113D7000622334 /* test */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 5B26CA8A1A113D7000622334 /* Build configuration list for PBXNativeTarget "test" */;
+			buildPhases = (
+				5B26CA721A113D7000622334 /* Sources */,
+				5B26CA731A113D7000622334 /* Frameworks */,
+				5B26CA741A113D7000622334 /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = test;
+			productName = test;
+			productReference = 5B26CA761A113D7000622334 /* libtest.dylib */;
+			productType = "com.apple.product-type.library.dynamic";
+		};
+		5B26CA801A113D7000622334 /* testTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 5B26CA8D1A113D7000622334 /* Build configuration list for PBXNativeTarget "testTests" */;
+			buildPhases = (
+				5B26CA7D1A113D7000622334 /* Sources */,
+				5B26CA7E1A113D7000622334 /* Frameworks */,
+				5B26CA7F1A113D7000622334 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				5B26CA841A113D7000622334 /* PBXTargetDependency */,
+			);
+			name = testTests;
+			productName = testTests;
+			productReference = 5B26CA811A113D7000622334 /* testTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		5B26CA6E1A113D7000622334 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0610;
+				ORGANIZATIONNAME = "Sander Soeteman";
+				TargetAttributes = {
+					5B26CA751A113D7000622334 = {
+						CreatedOnToolsVersion = 6.1;
+					};
+					5B26CA801A113D7000622334 = {
+						CreatedOnToolsVersion = 6.1;
+					};
+				};
+			};
+			buildConfigurationList = 5B26CA711A113D7000622334 /* Build configuration list for PBXProject "test" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 5B26CA6D1A113D7000622334;
+			productRefGroup = 5B26CA771A113D7000622334 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				5B26CA751A113D7000622334 /* test */,
+				5B26CA801A113D7000622334 /* testTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		5B26CA7F1A113D7000622334 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		5B26CA721A113D7000622334 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5B26CA9B1A113DE100622334 /* PlanbordCouch.m in Sources */,
+				5B26CAA31A113DE100622334 /* SSKeychainQuery.m in Sources */,
+				5B26CAA11A113DE100622334 /* SSKeychain.m in Sources */,
+				5B26CA9F1A113DE100622334 /* QueryResult.m in Sources */,
+				5B26CA9D1A113DE100622334 /* TouchDBController.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5B26CA7D1A113D7000622334 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		5B26CA841A113D7000622334 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 5B26CA751A113D7000622334 /* test */;
+			targetProxy = 5B26CA831A113D7000622334 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		5B26CA881A113D7000622334 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		5B26CA891A113D7000622334 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		5B26CA8B1A113D7000622334 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				EXECUTABLE_PREFIX = lib;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/lib/ios",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		5B26CA8C1A113D7000622334 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				EXECUTABLE_PREFIX = lib;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/lib/ios",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		5B26CA8E1A113D7000622334 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+					"$(inherited)",
+				);
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = testTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		5B26CA8F1A113D7000622334 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = testTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		5B26CA711A113D7000622334 /* Build configuration list for PBXProject "test" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5B26CA881A113D7000622334 /* Debug */,
+				5B26CA891A113D7000622334 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		5B26CA8A1A113D7000622334 /* Build configuration list for PBXNativeTarget "test" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5B26CA8B1A113D7000622334 /* Debug */,
+				5B26CA8C1A113D7000622334 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		5B26CA8D1A113D7000622334 /* Build configuration list for PBXNativeTarget "testTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5B26CA8E1A113D7000622334 /* Debug */,
+				5B26CA8F1A113D7000622334 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 5B26CA6E1A113D7000622334 /* Project object */;
+}
