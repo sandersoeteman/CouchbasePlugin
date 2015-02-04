@@ -19,18 +19,14 @@
 
   <!-- android -->
   <platform name="android">
-    <config-file target="config.xml" parent="/*/plugins">
-      <plugin name="PlanbordCouch" value="PlanbordCouch"/>
-    </config-file>
-
-    <config-file target="config.xml" parent="/widget">
+    
+    <config-file target="res/xml/config.xml" parent="/*">
       <feature name="PlanbordCouch">
         <param name="android-package" value="PlanbordCouch"/>
-        <param name="onload" value="true" />
+        <param name="onload" value="true"/>
       </feature>
     </config-file>
 
-   
   </platform>
 
   <!-- ios -->
