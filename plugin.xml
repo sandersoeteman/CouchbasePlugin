@@ -18,14 +18,20 @@
   </engines>
 
   <!-- android -->
-  <!-- <platform name="android">
-    <config-file target="res/xml/config.xml" parent="plugins">
-      <plugin name="Echo" value="com.appgyver.plugin.Echo"/>
+  <platform name="android">
+    <config-file target="config.xml" parent="/*/plugins">
+      <plugin name="PlanbordCouch" value="PlanbordCouch"/>
     </config-file>
 
-    <source-file src="src/android/com/appgyver/plugin/Echo.java"
-      target-dir="src/com/appgyver/plugin" />
-  </platform> -->
+    <config-file target="config.xml" parent="/widget">
+      <feature name="PlanbordCouch">
+        <param name="android-package" value="PlanbordCouch"/>
+        <param name="onload" value="true" />
+      </feature>
+    </config-file>
+
+   
+  </platform>
 
   <!-- ios -->
   <platform name="ios">
