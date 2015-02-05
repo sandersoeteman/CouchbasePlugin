@@ -1,3 +1,4 @@
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 
@@ -19,18 +20,23 @@ import com.couchbase.lite.Reducer;
 import com.couchbase.lite.View;
 import com.couchbase.lite.listener.LiteListener;
 import com.couchbase.lite.listener.Credentials;
+import com.couchbase.lite.replicator.Replication;
 import com.couchbase.lite.router.URLStreamHandlerFactory;
 import com.couchbase.lite.util.Log;
 
 import java.io.IOException;
+import java.net.URL;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@SuppressLint("SimpleDateFormat")
 public class PlanbordCouch extends CordovaPlugin {
 
 	private static final int DEFAULT_LISTEN_PORT = 5984;
@@ -39,6 +45,7 @@ public class PlanbordCouch extends CordovaPlugin {
 	private static final float VERSION = 1.0f;
 	private static final String USERNAME = "USERNAME";
 	private static final String PASSWORD = "PASSWORD";
+	private static final String COMPACTION_DATE = "COMPACTION_DATE";
 	private boolean initFailed = false;
 	private int listenPort;
     private Credentials allowedCredentials;
@@ -128,32 +135,175 @@ public class PlanbordCouch extends CordovaPlugin {
 				return true;
 			}
 			else if(action.equals("setupUser")) {
-				this.setupUser();
+				try {
+					this.setupUser();
+					callback.success();
+					
+					return true;
+				} catch (final Exception e) {
+					e.printStackTrace();
+					callback.error(e.getMessage());
+				}
 			}
 			else if(action.equals("setupReplicationForUser")) {
-				this.setupReplicationForUser();
+				try {
+					this.setupReplicationForUser(args.getString(0), args.getString(1), args.getJSONArray(2), args.getJSONArray(3));
+					callback.success();
+					
+					return true;
+				} catch (final Exception e) {
+					e.printStackTrace();
+					callback.error(e.getMessage());
+				}
 			}
 			else if(action.equals("stopReplications")) {
-				this.stopReplications();
+				try {
+					this.stopReplications();
+					callback.success();
+					
+					return true;
+				} catch (final Exception e) {
+					e.printStackTrace();
+					callback.error(e.getMessage());
+				}
 			}
 		}
 		
 		return false;
 	}
 	
-	private String stopReplications() {
-		// TODO Auto-generated method stub
-		return null;
+	private void compact() throws CouchbaseLiteException, IOException {
+		// clear time
+		Date today = new Date();
+		Calendar cal = Calendar.getInstance(); 
+		cal.setTime(today);
+		cal.set(Calendar.HOUR_OF_DAY, 0);
+		cal.set(Calendar.MINUTE, 0);
+		cal.set(Calendar.SECOND, 0);
+		cal.set(Calendar.MILLISECOND, 0);
+		today = cal.getTime();
+		
+		Date lastDate = this.getLastCompactionDate();
+		
+		if(lastDate == null || today.after(lastDate)) {
+			Manager manager = new Manager(new AndroidContext(this.cordova.getActivity()), Manager.DEFAULT_OPTIONS);
+			List<String> dbNames = manager.getAllDatabaseNames();
+			if(dbNames != null && dbNames.size() > 0) {
+				for(String dbName : dbNames) {
+					Database db = manager.getDatabase(dbName);
+					db.compact();
+				}
+			}
+			
+			this.setLastCompactionDate(today);
+		}
 	}
-
-	private String setupReplicationForUser() {
-		// TODO Auto-generated method stub
-		return null;
+	
+	private void startReplications() throws CouchbaseLiteException, IOException {
+		Manager manager = new Manager(new AndroidContext(this.cordova.getActivity()), Manager.DEFAULT_OPTIONS);
+		List<String> dbNames = manager.getAllDatabaseNames();
+		if(dbNames != null && dbNames.size() > 0) {
+			for(String dbName : dbNames) {
+				Database db = manager.getDatabase(dbName);
+				
+				List<Replication> replications = db.getAllReplications();
+				if(replications != null && replications.size() > 0) {
+					for(Replication repl : replications) {
+						repl.stop();
+					}
+				}
+			}
+		}		
+	}
+	
+	private void stopReplications() throws CouchbaseLiteException, IOException {
+		Manager manager = new Manager(new AndroidContext(this.cordova.getActivity()), Manager.DEFAULT_OPTIONS);
+		List<String> dbNames = manager.getAllDatabaseNames();
+		if(dbNames != null && dbNames.size() > 0) {
+			for(String dbName : dbNames) {
+				Database db = manager.getDatabase(dbName);
+				
+				List<Replication> replications = db.getAllReplications();
+				if(replications != null && replications.size() > 0) {
+					for(Replication repl : replications) {
+						repl.stop();
+					}
+				}
+			}
+		}
+	}
+	
+	private void setupReplicationForUser(String username, String server, JSONArray planningDBs, JSONArray imageDBs) throws Exception {
+		String myUsername = this.getUsername();
+		String password = this.getPassword();
+		
+		if(username == null || username.isEmpty() || myUsername == null || myUsername.isEmpty() || !username.equals(myUsername)) {
+			throw new Exception("Username mismatch for replication");
+		}
+		
+		Integer gebruikerID = Integer.parseInt(username);
+		
+		String planningDBName = String.format("planning_%s", username);
+		String imagesDBName = String.format("images_%s", username);
+		
+		Manager manager = new Manager(new AndroidContext(this.cordova.getActivity()), Manager.DEFAULT_OPTIONS);
+		
+		Database dbPlanning = manager.getDatabase(planningDBName);
+		Database dbImages = manager.getDatabase(imagesDBName);
+		
+		String[] split = server.split("://");
+		if(split == null || split.length != 2) {
+			throw new Exception("remote server address incomplete");
+		}
+		
+		String scheme = split[0];
+		String hostname = split[1];
+		Map<String, Object> filterParams = new HashMap<String, Object>();
+		filterParams.put("GebruikerID", gebruikerID);
+		
+		if(imageDBs.length() > 0) {
+			for(int i=0; i< imageDBs.length(); i++) {
+				String db = imageDBs.getString(i);
+				String address = String.format("%s://%s:%s@%s/%s", scheme, username, password, hostname, db);
+				URL url = new URL(address);
+				
+				Replication pull = dbImages.createPullReplication(url);
+				pull.setContinuous(true);
+				pull.start();
+				
+				if(db.equals(imagesDBName)) {
+					Replication push = dbImages.createPushReplication(url);
+					push.setContinuous(true);
+					push.setFilter("images/imageFilter");
+					push.setFilterParams(filterParams);
+					push.start();
+				}
+			}
+		}
+		
+		if(planningDBs.length() > 0) {
+			for(int i=0; i< planningDBs.length(); i++) {
+				String db = planningDBs.getString(i);
+				String address = String.format("%s://%s:%s@%s/%s", scheme, username, password, hostname, db);
+				URL url = new URL(address);
+				
+				Replication pull = dbPlanning.createPullReplication(url);
+				pull.setContinuous(true);
+				pull.start();
+				
+				if(db.equals(planningDBName)) {
+					Replication push = dbPlanning.createPushReplication(url);
+					push.setContinuous(true);
+					push.setFilter("planning/planningFilter");
+					push.setFilterParams(filterParams);
+					push.start();
+				}
+			}
+		}
 	}
 
 	private String setupUser() throws IOException, CouchbaseLiteException {
 		String username = this.getUsername();
-		String password = this.getPassword();
 		
 		String planningDBName = String.format("planning_%s", username);
 		String imagesDBName = String.format("images_%s", username);
@@ -162,6 +312,9 @@ public class PlanbordCouch extends CordovaPlugin {
 		
 		Database dbImages = manager.getDatabase(imagesDBName);
 		
+		// imagesFilter
+		dbImages.setFilter("images/imageFilter", new ImagesFilter());
+		
 		// imagesByTag
 		View viewImagesByTag = dbImages.getView("images/imagesByTag");
 		viewImagesByTag.setMapReduce(new Mapper() {
@@ -169,6 +322,7 @@ public class PlanbordCouch extends CordovaPlugin {
 		    public void map(Map<String, Object> document, Emitter emitter) {
 		    	String type = (String) document.get("type");
 		    	if(type != null && type.equals("image")) {
+					@SuppressWarnings("unchecked")
 					List<String> tags = (List<String>) document.get("Tags");
 					if(tags != null && tags.size() > 0) {
 						for(String tag : tags) {
@@ -199,12 +353,13 @@ public class PlanbordCouch extends CordovaPlugin {
 		    }
 		}, Float.toString(VERSION));
 		
-		// imagesFilter
-		dbImages.setFilter("images/imageFilter", new ImagesFilter());
 		
 		
 		// PLANNING
 		Database dbPlanning = manager.getDatabase(planningDBName);
+		
+		// planningFilter
+		dbPlanning.setFilter("planning/planningFilter", new PlanningFilter());
 		
 		// allActiviteiten
 		View viewAllActiviteiten = dbPlanning.getView("planning/allActiviteiten");
@@ -226,7 +381,13 @@ public class PlanbordCouch extends CordovaPlugin {
 		    public void map(Map<String, Object> document, Emitter emitter) {
 		    	String type = (String) document.get("type");
 		    	if(type != null && type.equals("activiteit")) {
-		    		String[] dates = this.GetActivityDatesForDoc(document);
+		    		String[] dates = new String[0];
+					try {
+						dates = this.GetActivityDatesForDoc(document);
+					} catch (ParseException e1) {
+						e1.printStackTrace();
+						return;
+					}
 		    		String lastDatumStr = null;
 		    		for(String date : dates) {
 		    			lastDatumStr = date;
@@ -267,7 +428,7 @@ public class PlanbordCouch extends CordovaPlugin {
 		    }
 
 			private String[] GetActivityDatesForDoc(
-					Map<String, Object> document) {
+					Map<String, Object> document) throws ParseException {
 				String type = (String) document.get("type");
 		    	if(type != null && type.equals("activiteit")) {
 		    		String recurringType = (String) document.get("RecurringType");
@@ -311,9 +472,9 @@ public class PlanbordCouch extends CordovaPlugin {
 
 			@SuppressWarnings("unchecked")
 			private String[] GetDailyActivitiesForDoc(
-					Map<String, Object> document) {
+					Map<String, Object> document) throws ParseException {
 				
-				List<String> dates = new List<String>();
+				List<String> dates = new ArrayList<String>();
 				DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 				Date docDate = null;
 				Date leftExtent = this.GetLeftExtent(document);
@@ -350,20 +511,77 @@ public class PlanbordCouch extends CordovaPlugin {
 				return (String[]) dates.toArray();
 			}
 
+			@SuppressWarnings("unchecked")
 			private boolean IsIgnoredDate(Date date,
 					Map<String, Object> document) {
-				// TODO Auto-generated method stub
+				Map<String, Object>[] ignoredDates = (Map<String, Object>[]) document.get("DatesToIgnore");
+				
+				if(ignoredDates == null || ignoredDates.length == 0) {
+					return false;
+				}
+				
+				DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+				String dateStr = format.format(date);
+				for(Map<String, Object> item : ignoredDates) {
+					String docDate = (String) item.get("Datum");
+					if(dateStr.equals(docDate)) {
+						return true;
+					}
+				}
+				
 				return false;
 			}
 
-			private Date GetRightExtent(Map<String, Object> document) {
-				// TODO Auto-generated method stub
-				return null;
+			private Date GetRightExtent(Map<String, Object> document) throws ParseException {
+				DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+				Calendar c = Calendar.getInstance();
+				
+				String recurringEndDateString = (String) document.get("RecurringEndDate");
+    			Date recurringEndDate = null;
+    			Date docDate = format.parse((String) document.get("Datum"));
+				Date rightExtent = null;
+				
+				String recurringType = (String) document.get("RecurringType");
+	    		if(recurringType.equals("Geen_herhaling")) {
+	    			rightExtent = (Date) docDate.clone(); 
+	    		}
+	    		else {
+	    			c.setTime(docDate); 
+    				c.add(Calendar.DATE, RIGHT_EXTENT_PERIOD);
+    				rightExtent = c.getTime();
+	    		}
+	    		
+	    		if(recurringEndDateString == null || recurringEndDateString.isEmpty()) {
+	    			return rightExtent;
+	    		}
+	    		
+	    		try {
+	    			recurringEndDate = format.parse(recurringEndDateString);
+	    		}
+	    		catch(ParseException e) {
+	    			return rightExtent;
+	    		}
+	    		
+	    		return rightExtent.before(recurringEndDate) ? rightExtent : recurringEndDate;
 			}
 
-			private Date GetLeftExtent(Map<String, Object> document) {
-				// TODO Auto-generated method stub
-				return null;
+			private Date GetLeftExtent(Map<String, Object> document) throws ParseException {
+				DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+				Date docDate = format.parse((String) document.get("Datum"));
+				Date leftExtent = null;
+				Calendar c = Calendar.getInstance();
+				
+				String recurringType = (String) document.get("RecurringType");
+	    		if(recurringType.equals("Geen_herhaling")) {
+	    			leftExtent = (Date) docDate.clone(); 
+	    		}
+	    		else {
+	    			c.setTime(docDate); 
+    				c.add(Calendar.DATE, -LEFT_EXTENT_PERIOD);
+	    			leftExtent = c.getTime();
+	    		}
+	    		
+	    		return docDate.after(leftExtent) ? docDate : leftExtent;
 			}
 		}, Float.toString(VERSION));
 		
@@ -396,6 +614,31 @@ public class PlanbordCouch extends CordovaPlugin {
 	private String getPassword() {
 		SharedPreferences prefs = this.cordova.getActivity().getPreferences(Context.MODE_PRIVATE);
 		return prefs.getString(PASSWORD, "");
+	}
+	
+	private Date getLastCompactionDate() {
+		SharedPreferences prefs = this.cordova.getActivity().getPreferences(Context.MODE_PRIVATE);
+		String dateStr = prefs.getString(COMPACTION_DATE, "");
+		if(dateStr == null || dateStr.isEmpty()) {
+			return null;
+		}
+		DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+		
+		try {
+			return format.parse(dateStr);
+		}
+		catch(final Exception e) {
+			return null;
+		}
+	}
+	
+	private void setLastCompactionDate(Date date) {
+		SharedPreferences prefs = this.cordova.getActivity().getPreferences(Context.MODE_PRIVATE);
+		DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+		SharedPreferences.Editor editor = prefs.edit();
+
+		editor.putString(COMPACTION_DATE, format.format(date));
+	    editor.commit();
 	}
 
 	private String setup() throws CouchbaseLiteException, IOException {
@@ -484,11 +727,28 @@ public class PlanbordCouch extends CordovaPlugin {
 
 	public void onResume(boolean multitasking) {
 		System.out.println("CBLite.onResume() called");
+		try {
+			this.startReplications();
+		}
+		catch(final Exception e) {
+			
+		}
 	}
+
+	
 
 	public void onPause(boolean multitasking) {
 		System.out.println("CBLite.onPause() called");
+		try {
+			this.stopReplications();
+			this.compact();
+		}
+		catch(final Exception e) {
+			
+		}
 	}
+
+	
 
 
 }
