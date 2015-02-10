@@ -33,7 +33,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
-
 import java.util.List;
 import java.util.Map;
 
@@ -43,7 +42,7 @@ public class PlanbordCouch extends CordovaPlugin {
 	private static final int DEFAULT_LISTEN_PORT = 5984;
 	private static final int LEFT_EXTENT_PERIOD = 60;
 	private static final int RIGHT_EXTENT_PERIOD = 540;
-	private static final float VERSION = 1.6f;
+	private static final float VERSION = 1.8f;
 	private static final String USERNAME = "USERNAME";
 	private static final String PASSWORD = "PASSWORD";
 	private static final String COMPACTION_DATE = "COMPACTION_DATE";
@@ -468,16 +467,82 @@ public class PlanbordCouch extends CordovaPlugin {
 				return new String[0];
 			}
 
+			@SuppressWarnings("unchecked")
 			private String[] GetWeeklyActivitiesForDoc(
-					Map<String, Object> document) {
-				// TODO Auto-generated method stub
-				return new String[0];
+					Map<String, Object> document) throws ParseException {
+Log.d("Sander", String.format("Wekelijks: %s", (String) document.get("Naam")));
+				List<String> dates = new ArrayList<String>();
+				DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+				Date docDate = null;
+				Date leftExtent = this.GetLeftExtent(document);
+				Date rightExtent = this.GetRightExtent(document);
+				List<Integer> dagen = new ArrayList<Integer>();
+				
+				try {
+					docDate = format.parse((String) document.get("Datum"));
+				} catch (ParseException e) {
+					e.printStackTrace();
+					return null;
+				}
+				
+				Map<String, Object> recurringPattern = (Map<String, Object>) document.get("RecurringPattern");
+				
+				if(docDate != null && recurringPattern != null) {
+					Integer perN = (Integer) recurringPattern.get("per_n");
+					
+					if((Boolean) recurringPattern.get("zo")) {
+						dagen.add(1);
+					}
+					if((Boolean) recurringPattern.get("ma")) {
+						dagen.add(2);
+					}
+					if((Boolean) recurringPattern.get("di")) {
+						dagen.add(3);
+					}
+					if((Boolean) recurringPattern.get("wo")) {
+						dagen.add(4);
+					}
+					if((Boolean) recurringPattern.get("don")) {
+						dagen.add(5);
+					}
+					if((Boolean) recurringPattern.get("vr")) {
+						dagen.add(6);
+					}
+					if((Boolean) recurringPattern.get("za")) {
+						dagen.add(7);
+					}
+					
+					Calendar c = Calendar.getInstance();
+					c.setTime(docDate); 
+					int dayOfweek = c.get(Calendar.DAY_OF_WEEK);
+					Date weekDate = (Date) docDate.clone();
+					
+					if(leftExtent.before(rightExtent) && perN != null) {
+						do {
+							
+							for(Integer dag : dagen) {
+								c.setTime(weekDate); 
+			    				c.add(Calendar.DATE, dag - dayOfweek);
+								Date date = c.getTime();
+								
+								if(!this.IsIgnoredDate(date, document) && (date.after(leftExtent) || date.equals(leftExtent)) && (date.before(rightExtent) || date.equals(rightExtent))) {
+									dates.add(format.format(date));
+								}
+							}
+							
+		    				c.setTime(weekDate); 
+		    				c.add(Calendar.DATE, perN * 7);
+		    				weekDate = c.getTime();
+						} while(weekDate.before(rightExtent) || weekDate.equals(rightExtent));
+					}
+				}
+				
+				return (String[]) dates.toArray(new String[dates.size()]);
 			}
 
 			@SuppressWarnings("unchecked")
 			private String[] GetDailyActivitiesForDoc(
 					Map<String, Object> document) throws ParseException {
-	Log.d("Sander", String.format("dagelijkse activiteit: %s", (String) document.get("Naam")));
 				List<String> dates = new ArrayList<String>();
 				DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 				Date docDate = null;
@@ -512,7 +577,6 @@ public class PlanbordCouch extends CordovaPlugin {
 					}
 				}
 				
-Log.d("Sander", String.format("Retourneert %d dates", dates.size()));
 				return (String[]) dates.toArray(new String[dates.size()]);
 			}
 
