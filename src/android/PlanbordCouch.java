@@ -33,6 +33,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+
 import java.util.List;
 import java.util.Map;
 
@@ -42,10 +43,11 @@ public class PlanbordCouch extends CordovaPlugin {
 	private static final int DEFAULT_LISTEN_PORT = 5984;
 	private static final int LEFT_EXTENT_PERIOD = 60;
 	private static final int RIGHT_EXTENT_PERIOD = 540;
-	private static final float VERSION = 1.0f;
+	private static final float VERSION = 1.6f;
 	private static final String USERNAME = "USERNAME";
 	private static final String PASSWORD = "PASSWORD";
 	private static final String COMPACTION_DATE = "COMPACTION_DATE";
+	private Manager manager = null;
 	private boolean initFailed = false;
 	private int listenPort;
     private Credentials allowedCredentials;
@@ -73,12 +75,13 @@ public class PlanbordCouch extends CordovaPlugin {
 
 			URLStreamHandlerFactory.registerSelfIgnoreError();
 
-			Manager server = startCBLite(this.cordova.getActivity());
+			manager = startCBLite(this.cordova.getActivity());
 
-			listenPort = startCBLListener(DEFAULT_LISTEN_PORT, server, allowedCredentials);
-
+			listenPort = startCBLListener(DEFAULT_LISTEN_PORT, manager, allowedCredentials);
+			
+			// TODO CORS dingen hier implementeren??
+			
 			System.out.println("initCBLite() completed successfully");
-
 
 		} catch (final Exception e) {
 			e.printStackTrace();
@@ -186,7 +189,6 @@ public class PlanbordCouch extends CordovaPlugin {
 		Date lastDate = this.getLastCompactionDate();
 		
 		if(lastDate == null || today.after(lastDate)) {
-			Manager manager = new Manager(new AndroidContext(this.cordova.getActivity()), Manager.DEFAULT_OPTIONS);
 			List<String> dbNames = manager.getAllDatabaseNames();
 			if(dbNames != null && dbNames.size() > 0) {
 				for(String dbName : dbNames) {
@@ -200,7 +202,6 @@ public class PlanbordCouch extends CordovaPlugin {
 	}
 	
 	private void startReplications() throws CouchbaseLiteException, IOException {
-		Manager manager = new Manager(new AndroidContext(this.cordova.getActivity()), Manager.DEFAULT_OPTIONS);
 		List<String> dbNames = manager.getAllDatabaseNames();
 		if(dbNames != null && dbNames.size() > 0) {
 			for(String dbName : dbNames) {
@@ -217,7 +218,6 @@ public class PlanbordCouch extends CordovaPlugin {
 	}
 	
 	private void stopReplications() throws CouchbaseLiteException, IOException {
-		Manager manager = new Manager(new AndroidContext(this.cordova.getActivity()), Manager.DEFAULT_OPTIONS);
 		List<String> dbNames = manager.getAllDatabaseNames();
 		if(dbNames != null && dbNames.size() > 0) {
 			for(String dbName : dbNames) {
@@ -245,8 +245,6 @@ public class PlanbordCouch extends CordovaPlugin {
 		
 		String planningDBName = String.format("planning_%s", username);
 		String imagesDBName = String.format("images_%s", username);
-		
-		Manager manager = new Manager(new AndroidContext(this.cordova.getActivity()), Manager.DEFAULT_OPTIONS);
 		
 		Database dbPlanning = manager.getDatabase(planningDBName);
 		Database dbImages = manager.getDatabase(imagesDBName);
@@ -308,8 +306,6 @@ public class PlanbordCouch extends CordovaPlugin {
 		String planningDBName = String.format("planning_%s", username);
 		String imagesDBName = String.format("images_%s", username);
 		
-		Manager manager = new Manager(new AndroidContext(this.cordova.getActivity()), Manager.DEFAULT_OPTIONS);
-		
 		Database dbImages = manager.getDatabase(imagesDBName);
 		
 		// imagesFilter
@@ -360,7 +356,7 @@ public class PlanbordCouch extends CordovaPlugin {
 		
 		// planningFilter
 		dbPlanning.setFilter("planning/planningFilter", new PlanningFilter());
-		
+
 		// allActiviteiten
 		View viewAllActiviteiten = dbPlanning.getView("planning/allActiviteiten");
 		viewAllActiviteiten.setMap(new Mapper() {
@@ -373,7 +369,6 @@ public class PlanbordCouch extends CordovaPlugin {
 		    	}
 		    }
 		}, Float.toString(VERSION));
-		
 		
 		View viewActiviteitenByDate = dbPlanning.getView("planning/activiteitenByDate");
 		viewActiviteitenByDate.setMap(new Mapper() {
@@ -405,12 +400,21 @@ public class PlanbordCouch extends CordovaPlugin {
 		    			Date recurringEndDate = null;
 		    			Date lastDate = null;
 		    			
-		    			try {
-							recurringEndDate = format.parse(recurringEndDateString);
-							lastDate = format.parse(lastDatumStr);
-						} catch (ParseException e) {
-							e.printStackTrace();
-						}
+		    			if(recurringEndDateString != null && recurringEndDateString.length() != 0) {
+		    				try {
+								recurringEndDate = format.parse(recurringEndDateString);
+							} catch (ParseException e) {
+								e.printStackTrace();
+							}	
+		    			}
+		    			
+		    			if(lastDatumStr != null && lastDatumStr.length() != 0) {
+			    			try {
+								lastDate = format.parse(lastDatumStr);
+							} catch (ParseException e) {
+								e.printStackTrace();
+							}
+		    			}
 		    			
 		    			if(recurringEndDate != null) {
 		    				Calendar c = Calendar.getInstance();
@@ -449,31 +453,31 @@ public class PlanbordCouch extends CordovaPlugin {
 		    			return this.GetYearlyActivitiesForDoc(document);
 		    		}
 		    	}
-				return null;
+		    	return new String[0];
 			}
 
 			private String[] GetYearlyActivitiesForDoc(
 					Map<String, Object> document) {
 				// TODO Auto-generated method stub
-				return null;
+				return new String[0];
 			}
 
 			private String[] GetMonthlyActivitiesForDoc(
 					Map<String, Object> document) {
 				// TODO Auto-generated method stub
-				return null;
+				return new String[0];
 			}
 
 			private String[] GetWeeklyActivitiesForDoc(
 					Map<String, Object> document) {
 				// TODO Auto-generated method stub
-				return null;
+				return new String[0];
 			}
 
 			@SuppressWarnings("unchecked")
 			private String[] GetDailyActivitiesForDoc(
 					Map<String, Object> document) throws ParseException {
-				
+	Log.d("Sander", String.format("dagelijkse activiteit: %s", (String) document.get("Naam")));
 				List<String> dates = new ArrayList<String>();
 				DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 				Date docDate = null;
@@ -497,7 +501,7 @@ public class PlanbordCouch extends CordovaPlugin {
 					
 					if(leftExtent.before(rightExtent) && perN != null) {
 						do {
-							if(this.IsIgnoredDate(date, document) && (date.after(leftExtent) || date.equals(leftExtent)) && (date.before(rightExtent) || date.equals(rightExtent))) {
+							if(!this.IsIgnoredDate(date, document) && (date.after(leftExtent) || date.equals(leftExtent)) && (date.before(rightExtent) || date.equals(rightExtent))) {
 								dates.add(format.format(date));
 							}
 							
@@ -508,15 +512,16 @@ public class PlanbordCouch extends CordovaPlugin {
 					}
 				}
 				
-				return (String[]) dates.toArray();
+Log.d("Sander", String.format("Retourneert %d dates", dates.size()));
+				return (String[]) dates.toArray(new String[dates.size()]);
 			}
 
 			@SuppressWarnings("unchecked")
 			private boolean IsIgnoredDate(Date date,
 					Map<String, Object> document) {
-				Map<String, Object>[] ignoredDates = (Map<String, Object>[]) document.get("DatesToIgnore");
+				ArrayList<Map<String, Object>> ignoredDates = (ArrayList<Map<String, Object>>) document.get("DatesToIgnore");
 				
-				if(ignoredDates == null || ignoredDates.length == 0) {
+				if(ignoredDates == null || ignoredDates.size() == 0) {
 					return false;
 				}
 				
@@ -584,7 +589,7 @@ public class PlanbordCouch extends CordovaPlugin {
 	    		return docDate.after(leftExtent) ? docDate : leftExtent;
 			}
 		}, Float.toString(VERSION));
-		
+				
 		return null;
 	}
 
@@ -640,11 +645,8 @@ public class PlanbordCouch extends CordovaPlugin {
 		editor.putString(COMPACTION_DATE, format.format(date));
 	    editor.commit();
 	}
-
+	
 	private String setup() throws CouchbaseLiteException, IOException {
-		Manager manager = new Manager(new AndroidContext(this.cordova.getActivity()), Manager.DEFAULT_OPTIONS);
-		
-		// TODO CORS dingen hier implementeren??
 		
 		Database dbUser = manager.getDatabase("planbord_user");
 		Database dbApp = manager.getDatabase("app");
@@ -696,17 +698,17 @@ public class PlanbordCouch extends CordovaPlugin {
 	protected Manager startCBLite(Context context) {
 		Manager manager;
 		try {
-		        Manager.enableLogging(Log.TAG, Log.VERBOSE);
-			Manager.enableLogging(Log.TAG_SYNC, Log.VERBOSE);
+		    Manager.enableLogging(Log.TAG, Log.DEBUG);
+			Manager.enableLogging(Log.TAG_SYNC, Log.ERROR);
 			Manager.enableLogging(Log.TAG_QUERY, Log.VERBOSE);
 			Manager.enableLogging(Log.TAG_VIEW, Log.VERBOSE);
-			Manager.enableLogging(Log.TAG_CHANGE_TRACKER, Log.VERBOSE);
-			Manager.enableLogging(Log.TAG_BLOB_STORE, Log.VERBOSE);
+			Manager.enableLogging(Log.TAG_CHANGE_TRACKER, Log.ERROR);
+			Manager.enableLogging(Log.TAG_BLOB_STORE, Log.ERROR);
 			Manager.enableLogging(Log.TAG_DATABASE, Log.VERBOSE);
 			Manager.enableLogging(Log.TAG_LISTENER, Log.VERBOSE);
-			Manager.enableLogging(Log.TAG_MULTI_STREAM_WRITER, Log.VERBOSE);
+			Manager.enableLogging(Log.TAG_MULTI_STREAM_WRITER, Log.ERROR);
 			Manager.enableLogging(Log.TAG_REMOTE_REQUEST, Log.VERBOSE);
-			Manager.enableLogging(Log.TAG_ROUTER, Log.VERBOSE);
+			Manager.enableLogging(Log.TAG_ROUTER, Log.ERROR);
 			manager = new Manager(new AndroidContext(context), Manager.DEFAULT_OPTIONS);
 			
 		} catch (IOException e) {
