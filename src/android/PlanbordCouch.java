@@ -43,7 +43,7 @@ public class PlanbordCouch extends CordovaPlugin {
 	private static final int DEFAULT_LISTEN_PORT = 5984;
 	private static final int LEFT_EXTENT_PERIOD = 60;
 	private static final int RIGHT_EXTENT_PERIOD = 540;
-	private static final float VERSION = 1.9f;
+	private static final float VERSION = 1.10f;
 	private static final String USERNAME = "USERNAME";
 	private static final String PASSWORD = "PASSWORD";
 	private static final String COMPACTION_DATE = "COMPACTION_DATE";
@@ -456,16 +456,60 @@ public class PlanbordCouch extends CordovaPlugin {
 		    	return new String[0];
 			}
 
+			@SuppressWarnings("unchecked")
 			private String[] GetYearlyActivitiesForDoc(
-					Map<String, Object> document) {
-				// TODO Auto-generated method stub
-				return new String[0];
+					Map<String, Object> document) throws ParseException {
+				List<String> dates = new ArrayList<String>();
+				DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+				Date docDate = null;
+				Date leftExtent = this.GetLeftExtent(document);
+				Date rightExtent = this.GetRightExtent(document);
+				
+				try {
+					docDate = format.parse((String) document.get("Datum"));
+				} catch (ParseException e) {
+					e.printStackTrace();
+					return null;
+				}
+				
+				Map<String, Object> recurringPattern = (Map<String, Object>) document.get("RecurringPattern");
+				
+				if(docDate != null && recurringPattern != null) {
+					Integer perN = (Integer) recurringPattern.get("per_n");
+					
+					Calendar c = Calendar.getInstance();
+					c.setTime(docDate); 
+					int dayOfMonth = c.get(Calendar.DATE);
+					c.set(Calendar.DATE, 1);
+					Date yearDate = c.getTime();
+					
+					if(leftExtent.before(rightExtent) && perN != null) {
+						do {
+							Integer daysInMonth = c.getActualMaximum(Calendar.DAY_OF_MONTH);
+							
+							if(dayOfMonth <= daysInMonth) {
+			    				c.setTime(yearDate); 
+			    				c.set(Calendar.DATE, dayOfMonth);
+								Date date = c.getTime();
+								
+								if(!this.IsIgnoredDate(date, document) && (date.after(leftExtent) || date.equals(leftExtent)) && (date.before(rightExtent) || date.equals(rightExtent))) {
+									dates.add(format.format(date));
+								}
+							}
+							
+		    				c.setTime(yearDate); 
+		    				c.add(Calendar.YEAR, perN);
+		    				yearDate = c.getTime();
+						} while(yearDate.before(rightExtent) || yearDate.equals(rightExtent));
+					}
+				}
+
+				return (String[]) dates.toArray(new String[dates.size()]);
 			}
 
 			@SuppressWarnings("unchecked")
 			private String[] GetMonthlyActivitiesForDoc(
 					Map<String, Object> document) throws ParseException {
-Log.d("Sander", String.format("Maandelijks: %s", (String) document.get("Naam")));
 				List<String> dates = new ArrayList<String>();
 				DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 				Date docDate = null;
@@ -510,7 +554,7 @@ Log.d("Sander", String.format("Maandelijks: %s", (String) document.get("Naam")))
 						} while(monthDate.before(rightExtent) || monthDate.equals(rightExtent));
 					}
 				}
-Log.d("Sander", String.format("dagen: %s", Arrays.toString((String[]) dates.toArray(new String[dates.size()]))));
+
 				return (String[]) dates.toArray(new String[dates.size()]);
 			}
 
