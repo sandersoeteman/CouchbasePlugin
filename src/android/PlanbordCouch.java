@@ -1,3 +1,5 @@
+package net.pictoplanner.plugin;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;

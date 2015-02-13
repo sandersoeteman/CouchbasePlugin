@@ -1,3 +1,5 @@
+package net.pictoplanner.plugin;
+
 import java.util.List;
 import java.util.Map;
 
