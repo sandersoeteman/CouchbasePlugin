@@ -22,7 +22,7 @@
     
     <config-file target="res/xml/config.xml" parent="/*">
       <feature name="PlanbordCouch">
-        <param name="android-package" value="net.pictoplanner.plugin.PlanbordCouch"/>
+        <param name="android-package" value="org.apache.cordova.plugin.PlanbordCouch"/>
         <param name="onload" value="true"/>
       </feature>
     </config-file>
