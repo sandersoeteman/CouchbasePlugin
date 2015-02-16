@@ -27,6 +27,50 @@
       </feature>
     </config-file>
 
+    <framework src="android.annotation.SuppressLint"/>
+    <framework src="android.content.Context"/>
+    <framework src="android.content.SharedPreferences"/>
+    <framework src="org.apache.cordova.CallbackContext"/>
+    <framework src="org.apache.cordova.CordovaPlugin"/>
+    <framework src="org.apache.cordova.CordovaWebView"/>
+    <framework src="org.apache.cordova.CordovaInterface"/>
+    <framework src="org.json.JSONArray"/>
+    <framework src="org.json.JSONException"/>
+    <framework src="org.json.JSONObject"/>
+    <framework src="java.io.IOException"/>
+    <framework src="java.net.URL"/>
+    <framework src="java.text.DateFormat"/>
+    <framework src="java.text.ParseException"/>
+    <framework src="java.text.SimpleDateFormat"/>
+    <framework src="java.util.ArrayList"/>
+    <framework src="java.util.Arrays"/>
+    <framework src="java.util.Calendar"/>
+    <framework src="java.util.Date"/>
+    <framework src="java.util.HashMap"/>
+    <framework src="java.util.List"/>
+    <framework src="java.util.Map"/>
+
+    <source-file target-dir="libs" src="lib/android/commons-io-2.0.1.jar">
+    <source-file target-dir="libs" src="lib/android/couchbase-lite-android-1.0.3.1.jar">
+    <source-file target-dir="libs" src="lib/android/couchbase-lite-android-javadocs-community-1.0.3.1.jar">
+    <source-file target-dir="libs" src="lib/android/couchbase-lite-java-core-1.0.3.1.jar">
+    <source-file target-dir="libs" src="lib/android/couchbase-lite-java-javascript-1.0.3.1.jar">
+    <source-file target-dir="libs" src="lib/android/couchbase-lite-java-listener-1.0.3.1.jar">
+    <source-file target-dir="libs" src="lib/android/jackson-core-asl-1.9.2.jar">
+    <source-file target-dir="libs" src="lib/android/jackson-mapper-asl-1.9.2.jar">
+    <source-file target-dir="libs" src="lib/android/rhino-1.7R3.jar">
+    <source-file target-dir="libs" src="lib/android/servlet-2-3.jar">
+    <source-file target-dir="libs" src="lib/android/stateless4j-2.4.0.jar">
+    <source-file target-dir="libs" src="lib/android/webserver-2-3.jar">
+    <source-file target-dir="libs" src="lib/android/armeabi/libcom_couchbase_touchdb_RevCollator.so">
+    <source-file target-dir="libs" src="lib/android/armeabi/libcom_couchbase_touchdb_TDCollateJSON.so">
+    <source-file target-dir="libs" src="lib/android/armeabi-v7a/libcom_couchbase_touchdb_RevCollator.so">
+    <source-file target-dir="libs" src="lib/android/armeabi-v7a/libcom_couchbase_touchdb_TDCollateJSON.so">
+    <source-file target-dir="libs" src="lib/android/mips/libcom_couchbase_touchdb_RevCollator.so">
+    <source-file target-dir="libs" src="lib/android/mips/libcom_couchbase_touchdb_TDCollateJSON.so">
+    <source-file target-dir="libs" src="lib/android/x86/libcom_couchbase_touchdb_RevCollator.so">
+    <source-file target-dir="libs" src="lib/android/x86/libcom_couchbase_touchdb_TDCollateJSON.so">
+
   </platform>
 
   <!-- ios -->
