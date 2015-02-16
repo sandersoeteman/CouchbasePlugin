@@ -71,9 +71,9 @@
     <source-file target-dir="libs/x86" src="lib/android/x86/libcom_couchbase_touchdb_RevCollator.so"/>
     <source-file target-dir="libs/x86" src="lib/android/x86/libcom_couchbase_touchdb_TDCollateJSON.so"/>
 
-    <source-file target-dir="src" src="src/android/ImagesFilter.java"/>
-    <source-file target-dir="src" src="src/android/PlanbordCouch.java"/>
-    <source-file target-dir="src" src="src/android/PlanningFilter.java"/>
+    <source-file target-dir="src/org/apache/cordova/plugin" src="src/android/ImagesFilter.java"/>
+    <source-file target-dir="src/org/apache/cordova/plugin" src="src/android/PlanbordCouch.java"/>
+    <source-file target-dir="src/org/apache/cordova/plugin" src="src/android/PlanningFilter.java"/>
 
   </platform>
 
