@@ -62,10 +62,12 @@
     <source-file target-dir="libs" src="lib/android/servlet-2-3.jar"/>
     <source-file target-dir="libs" src="lib/android/stateless4j-2.4.0.jar"/>
     <source-file target-dir="libs" src="lib/android/webserver-2-3.jar"/>
+    <source-file target-dir="libs/x86" src="lib/android/x86/libcom_couchbase_touchdb_RevCollator.so"/>
+    <source-file target-dir="libs/x86" src="lib/android/x86/libcom_couchbase_touchdb_TDCollateJSON.so"/>
 
-    <source-file target-dir="src/org/apache/cordova/plugin/pictoplanner" src="src/android/ImagesFilter.java"/>
-    <source-file target-dir="src/org/apache/cordova/plugin/pictoplanner" src="src/android/PlanbordCouch.java"/>
-    <source-file target-dir="src/org/apache/cordova/plugin/pictoplanner" src="src/android/PlanningFilter.java"/>
+    <source-file target-dir="src/org/apache/cordova/plugin" src="src/android/ImagesFilter.java"/>
+    <source-file target-dir="src/org/apache/cordova/plugin" src="src/android/PlanbordCouch.java"/>
+    <source-file target-dir="src/org/apache/cordova/plugin" src="src/android/PlanningFilter.java"/>
 
   </platform>
 </plugin>
