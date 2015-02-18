@@ -31,6 +31,7 @@
     <source-file target-dir="libs" src="lib/android/couchbase-lite-java-core-1.0.3.1.jar"/>
     <source-file target-dir="libs" src="lib/android/couchbase-lite-java-javascript-1.0.3.1.jar"/>
     <source-file target-dir="libs" src="lib/android/couchbase-lite-java-listener-1.0.3.1.jar"/>
+    <source-file target-dir="libs" src="lib/android/jackson-core-asl-1.9.2.jar"/>
 
     
     <source-file target-dir="libs/armeabi" src="lib/android/armeabi/libcom_couchbase_touchdb_RevCollator.so"/>
