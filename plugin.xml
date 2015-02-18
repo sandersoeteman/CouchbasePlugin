@@ -33,8 +33,6 @@
     <source-file target-dir="libs" src="lib/android/couchbase-lite-java-listener-1.0.3.1.jar"/>
     <source-file target-dir="libs" src="lib/android/jackson-core-asl-1.9.2.jar"/>
     <source-file target-dir="libs" src="lib/android/jackson-mapper-asl-1.9.2.jar"/>
-    <source-file target-dir="libs" src="lib/android/servlet-2-3.jar"/>
-    <source-file target-dir="libs" src="lib/android/stateless4j-2.4.0.jar"/>
 
     
     <source-file target-dir="libs/armeabi" src="lib/android/armeabi/libcom_couchbase_touchdb_RevCollator.so"/>
@@ -45,7 +43,6 @@
     <source-file target-dir="libs/mips" src="lib/android/mips/libcom_couchbase_touchdb_TDCollateJSON.so"/>
     <source-file target-dir="libs/x86" src="lib/android/x86/libcom_couchbase_touchdb_RevCollator.so"/>
     <source-file target-dir="libs/x86" src="lib/android/x86/libcom_couchbase_touchdb_TDCollateJSON.so"/>
-
     
   </platform>
 
