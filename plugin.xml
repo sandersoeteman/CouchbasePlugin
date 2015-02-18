@@ -73,10 +73,9 @@
     <source-file target-dir="src/org/apache/cordova/plugin/pictoplanner" src="src/android/ImagesFilter.java"/>
     <source-file target-dir="src/org/apache/cordova/plugin/pictoplanner" src="src/android/PlanbordCouch.java"/>
     <source-file target-dir="src/org/apache/cordova/plugin/pictoplanner" src="src/android/PlanningFilter.java"/>
-
   </platform>
 
-  <!-- ios -->
+
   <platform name="ios">
     <config-file target="config.xml" parent="/*/plugins">
       <plugin name="PlanbordCouch" value="PlanbordCouch" onload="true" />
