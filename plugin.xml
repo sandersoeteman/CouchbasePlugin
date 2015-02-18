@@ -26,9 +26,7 @@
       </feature>
     </config-file>
     
-    
     <source-file target-dir="src/org/apache/cordova/plugin/pictoplanner" src="src/android/PlanbordCouch.java"/>
-    
   </platform>
 
 
