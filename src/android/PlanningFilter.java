@@ -1,4 +1,4 @@
-package org.apache.cordova.plugin;
+package org.apache.cordova.plugin.pictoplanner;
 
 import java.util.List;
 import java.util.Map;

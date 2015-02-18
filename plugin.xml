@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugin xmlns="http://www.phonegap.com/ns/plugins/1.0"
-    id="net.pictoplanner.plugin"
+    id="org.apache.cordova.plugin.pictoplanner"
     version="1.0.0">
 
     <name>PlanbordCouchPlugin</name>
@@ -22,7 +22,7 @@
     
     <config-file target="res/xml/config.xml" parent="/*">
       <feature name="PlanbordCouch">
-        <param name="android-package" value="org.apache.cordova.plugin.PlanbordCouch"/>
+        <param name="android-package" value="org.apache.cordova.plugin.pictoplanner.PlanbordCouch"/>
         <param name="onload" value="true"/>
       </feature>
     </config-file>
