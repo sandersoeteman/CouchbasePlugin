@@ -26,7 +26,6 @@
       </feature>
     </config-file>
 
-    
     <source-file target-dir="libs" src="lib/android/couchbase-lite-android-1.0.3.1.jar"/>
     <source-file target-dir="libs" src="lib/android/couchbase-lite-java-core-1.0.3.1.jar"/>
     <source-file target-dir="libs" src="lib/android/couchbase-lite-java-javascript-1.0.3.1.jar"/>
@@ -46,7 +45,11 @@
     <source-file target-dir="libs/mips" src="lib/android/mips/libcom_couchbase_touchdb_TDCollateJSON.so"/>
     <source-file target-dir="libs/x86" src="lib/android/x86/libcom_couchbase_touchdb_RevCollator.so"/>
     <source-file target-dir="libs/x86" src="lib/android/x86/libcom_couchbase_touchdb_TDCollateJSON.so"/>
-    
+
+    <source-file target-dir="src/org/apache/cordova/plugin/pictoplanner" src="src/android/ImagesFilter.java"/>
+    <source-file target-dir="src/org/apache/cordova/plugin/pictoplanner" src="src/android/PlanbordCouch.java"/>
+    <source-file target-dir="src/org/apache/cordova/plugin/pictoplanner" src="src/android/PlanningFilter.java"/>
+
   </platform>
 
 
