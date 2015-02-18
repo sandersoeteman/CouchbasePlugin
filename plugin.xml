@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<plugin xmlns="http://www.phonegap.com/ns/plugins/1.0"
-    id="net.pictoplanner.plugin"
+<plugin xmlns="http://www.phonegap.com/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android"
+    id="org.apache.cordova.plugin.pictoplanner"
     version="1.0.0">
 
-    <name>PlanbordCouchPlugin</name>
+  <name>PlanbordCouchPlugin</name>
 
   <description>
     PlanbordCouch Plugin for Steroids.js
@@ -17,12 +17,11 @@
     <engine name="cordova" version=">=3.0.0" />
   </engines>
 
-  <!-- android -->
   <platform name="android">
     
     <config-file target="res/xml/config.xml" parent="/*">
       <feature name="PlanbordCouch">
-        <param name="android-package" value="org.apache.cordova.plugin.PlanbordCouch"/>
+        <param name="android-package" value="org.apache.cordova.plugin.pictoplanner.PlanbordCouch"/>
         <param name="onload" value="true"/>
       </feature>
     </config-file>
@@ -71,9 +70,9 @@
     <source-file target-dir="libs/x86" src="lib/android/x86/libcom_couchbase_touchdb_RevCollator.so"/>
     <source-file target-dir="libs/x86" src="lib/android/x86/libcom_couchbase_touchdb_TDCollateJSON.so"/>
 
-    <source-file target-dir="src/org/apache/cordova/plugin" src="src/android/ImagesFilter.java"/>
-    <source-file target-dir="src/org/apache/cordova/plugin" src="src/android/PlanbordCouch.java"/>
-    <source-file target-dir="src/org/apache/cordova/plugin" src="src/android/PlanningFilter.java"/>
+    <source-file target-dir="src/org/apache/cordova/plugin/pictoplanner" src="src/android/ImagesFilter.java"/>
+    <source-file target-dir="src/org/apache/cordova/plugin/pictoplanner" src="src/android/PlanbordCouch.java"/>
+    <source-file target-dir="src/org/apache/cordova/plugin/pictoplanner" src="src/android/PlanningFilter.java"/>
 
   </platform>
 
