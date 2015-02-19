@@ -25,6 +25,8 @@
         <param name="onload" value="true"/>
       </feature>
     </config-file>
+
+    <framework src="org.codehaus.jackson.map" />
     
     <source-file target-dir="libs" src="lib/android/couchbase-lite-android-1.0.3.1.jar"/>
     <source-file target-dir="libs" src="lib/android/couchbase-lite-java-core-1.0.3.1.jar"/>
