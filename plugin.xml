@@ -36,7 +36,6 @@
     <source-file target-dir="libs" src="lib/android/stateless4j-2.4.0.jar"/>
     <source-file target-dir="libs" src="lib/android/commons-io-2.0.1.jar"/>
     <source-file target-dir="libs" src="lib/android/webserver-2-3.jar"/>
-    <source-file target-dir="libs" src="lib/android/commons-io-2.0.1.jar"/>
     
     <source-file target-dir="libs/armeabi" src="lib/android/armeabi/libcom_couchbase_touchdb_RevCollator.so"/>
     <source-file target-dir="libs/armeabi" src="lib/android/armeabi/libcom_couchbase_touchdb_TDCollateJSON.so"/>
