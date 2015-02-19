@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugin xmlns="http://www.phonegap.com/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android"
-    id="org.apache.cordova.plugin.pictoplanner"
+    id="org.apache.cordova.plugin.pictoplanner.PlanbordCouch"
     version="1.0.0">
 
   <name>PlanbordCouchPlugin</name>
@@ -26,6 +26,7 @@
       </feature>
     </config-file>
     
+    <source-file target-dir="src/org/apache/cordova/plugin/pictoplanner" src="src/android/PlanbordCouch.java"/>
   </platform>
 
 

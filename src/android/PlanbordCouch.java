@@ -1,4 +1,4 @@
-package org.apache.cordova.plugin;
+package org.apache.cordova.plugin.pictoplanner;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -43,6 +43,13 @@ public class PlanbordCouch extends CordovaPlugin {
 		super();
 		System.out.println("PlanbordCouch() constructor called");
 	}
+
+	@Override
+	public void initialize(CordovaInterface cordova, CordovaWebView webView) {
+	    super.initialize(cordova, webView);
+	    // your init code here
+	}
+
 
 
 	@Override
