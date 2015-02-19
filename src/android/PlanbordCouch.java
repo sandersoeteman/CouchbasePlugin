@@ -1,4 +1,4 @@
-package org.apache.cordova.plugin.pictoplanner;
+package net.pictoplanner.plugin;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
