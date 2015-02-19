@@ -52,6 +52,72 @@
 
   </platform>
 
+  <platform name="ios">
+    <config-file target="config.xml" parent="/*/plugins">
+      <plugin name="PlanbordCouch" value="PlanbordCouch" onload="true" />
+    </config-file>
+
+    <config-file target="config.xml" parent="/widget">
+      <feature name="PlanbordCouch">
+        <param name="ios-package" value="PlanbordCouch"/>
+        <param name="onload" value="true" />
+      </feature>
+    </config-file>
+
+    <framework src="libsqlite3.dylib"/>
+    <framework src="libstdc++.dylib"/>
+    <framework src="libicucore.dylib"/>
+    <framework src="libz.dylib"/>
+    <framework src="Foundation.framework"/>
+    <framework src="Security.framework"/>
+    <framework src="CFNetwork.framework"/>
+    <framework src="SystemConfiguration.framework"/>
+
+
+    <source-file framework="true" src="lib/ios/CouchbaseLite.framework/CouchbaseLite"/>
+    <source-file framework="true" src="lib/ios/CouchbaseLiteListener.framework//CouchbaseLiteListener"/>
+    
+    <header-file src="lib/ios/CouchbaseLite.framework/Headers/CBLAttachment.h"/>
+    <header-file src="lib/ios/CouchbaseLite.framework/Headers/CBLAuthenticator.h"/>
+    <header-file src="lib/ios/CouchbaseLite.framework/Headers/CBLDatabase.h"/>
+    <header-file src="lib/ios/CouchbaseLite.framework/Headers/CBLDatabaseChange.h"/>
+    <header-file src="lib/ios/CouchbaseLite.framework/Headers/CBLDocument.h"/>
+    <header-file src="lib/ios/CouchbaseLite.framework/Headers/CBLGeometry.h"/>
+    <header-file src="lib/ios/CouchbaseLite.framework/Headers/CBLJSON.h"/>
+    <header-file src="lib/ios/CouchbaseLite.framework/Headers/CBLManager.h"/>
+    <header-file src="lib/ios/CouchbaseLite.framework/Headers/CBLModel.h"/>
+    <header-file src="lib/ios/CouchbaseLite.framework/Headers/CBLModelFactory.h"/>
+    <header-file src="lib/ios/CouchbaseLite.framework/Headers/CBLQuery+FullTextSearch.h"/>
+    <header-file src="lib/ios/CouchbaseLite.framework/Headers/CBLQuery+Geo.h"/>
+    <header-file src="lib/ios/CouchbaseLite.framework/Headers/CBLQuery.h"/>
+    <header-file src="lib/ios/CouchbaseLite.framework/Headers/CBLReplication.h"/>
+    <header-file src="lib/ios/CouchbaseLite.framework/Headers/CBLRevision.h"/>
+    <header-file src="lib/ios/CouchbaseLite.framework/Headers/CBLUITableSource.h"/>
+    <header-file src="lib/ios/CouchbaseLite.framework/Headers/CBLView.h"/>
+    <header-file src="lib/ios/CouchbaseLite.framework/Headers/CouchbaseLite.h"/>
+    <header-file src="lib/ios/CouchbaseLite.framework/Headers/MYDynamicObject.h"/>
+    <header-file src="lib/ios/CouchbaseLite.framework/PrivateHeaders/CBLReplication+Transformation.h"/>
+    <header-file src="lib/ios/CouchbaseLite.framework/PrivateHeaders/CBLStatus.h"/>
+    <header-file src="lib/ios/CouchbaseLite.framework/PrivateHeaders/CouchbaseLitePrivate.h"/>
+    <resource-file src="lib/ios/CouchbaseLite.framework/Info.plist"/>
+    
+    <header-file src="lib/ios/CouchbaseLiteListener.framework//Headers/CBLListener.h"/>
+
+    <header-file src="src/ios/PlanbordCouch.h" />
+    <source-file src="src/ios/PlanbordCouch.m" />
+
+    <header-file src="src/ios/TouchDBController.h" />
+    <source-file src="src/ios/TouchDBController.m" />
+
+    <header-file src="src/ios/QueryResult.h" />
+    <source-file src="src/ios/QueryResult.m" />
+
+    <header-file src="src/ios/SSKeychain.h" />
+    <source-file src="src/ios/SSKeychain.m" />
+
+    <header-file src="src/ios/SSKeychainQuery.h" />
+    <source-file src="src/ios/SSKeychainQuery.m" />
+  </platform>
 
  
 </plugin>
