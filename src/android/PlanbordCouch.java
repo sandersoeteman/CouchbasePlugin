@@ -56,7 +56,7 @@ public class PlanbordCouch extends CordovaPlugin {
 	public boolean execute(String action, JSONArray args,
 			CallbackContext callback) {
 		
-		callback.success("dit dan weer wel")
+		callback.success("dit dan weer wel");
 		
 		return true;
 	}
