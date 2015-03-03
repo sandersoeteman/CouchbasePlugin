@@ -51,9 +51,14 @@ public class PlanbordCouch extends CordovaPlugin {
 	private static final String USERNAME = "USERNAME";
 	private static final String PASSWORD = "PASSWORD";
 	private static final String COMPACTION_DATE = "COMPACTION_DATE";
+	private Thread listenerThread = null;
+	private LiteListener listener = null;
 	private Manager manager = null;
+	private Database dbApp = null;
+	private Database dbPlanning = null;
+	private Database dbImages = null;
+	private Database dbUsers = null;
 	private boolean initFailed = false;
-	private int listenPort;
     private Credentials allowedCredentials;
 
 	/**
@@ -80,8 +85,10 @@ public class PlanbordCouch extends CordovaPlugin {
 			URLStreamHandlerFactory.registerSelfIgnoreError();
 
 			manager = startCBLite(this.cordova.getActivity());
+			dbUsers = manager.getDatabase("planbord_user");
+			dbApp = manager.getDatabase("app");
 
-			listenPort = startCBLListener(DEFAULT_LISTEN_PORT, manager, allowedCredentials);
+			startCBLListener(DEFAULT_LISTEN_PORT, manager, allowedCredentials);
 			
 			// TODO CORS dingen hier implementeren??
 			
@@ -310,7 +317,7 @@ public class PlanbordCouch extends CordovaPlugin {
 		String planningDBName = String.format("planning_%s", username);
 		String imagesDBName = String.format("images_%s", username);
 		
-		Database dbImages = manager.getDatabase(imagesDBName);
+		dbImages = manager.getDatabase(imagesDBName);
 		
 		// imagesFilter
 		dbImages.setFilter("images/imageFilter", new ImagesFilter());
@@ -356,7 +363,7 @@ public class PlanbordCouch extends CordovaPlugin {
 		
 		
 		// PLANNING
-		Database dbPlanning = manager.getDatabase(planningDBName);
+		dbPlanning = manager.getDatabase(planningDBName);
 		
 		// planningFilter
 		dbPlanning.setFilter("planning/planningFilter", new PlanningFilter());
@@ -806,9 +813,7 @@ public class PlanbordCouch extends CordovaPlugin {
 	
 	private String setup() throws CouchbaseLiteException, IOException {
 		
-		Database dbUser = manager.getDatabase("planbord_user");
-		
-		View viewUsers = dbUser.getView("planbord_user/allUsers");
+		View viewUsers = dbUsers.getView("planbord_user/allUsers");
 		viewUsers.setMap(new Mapper() {
 		    @Override
 		    public void map(Map<String, Object> document, Emitter emitter) {
@@ -820,7 +825,7 @@ public class PlanbordCouch extends CordovaPlugin {
 		    }
 		}, Float.toString(VERSION));
 		
-		Database dbApp = manager.getDatabase("app");
+		
 		String address = "https://db.pictoplanner.net/android-app-test";
 		URL url = new URL(address);
 		
@@ -872,7 +877,7 @@ public class PlanbordCouch extends CordovaPlugin {
 				"http://%s:%s@localhost:%d/",
                 allowedCredentials.getLogin(),
                 allowedCredentials.getPassword(),
-                listenPort
+                listener.getListenPort()
         );
 	}
 
@@ -898,14 +903,10 @@ public class PlanbordCouch extends CordovaPlugin {
 		return manager;
 	}
 
-	private int startCBLListener(int listenPort, Manager manager, Credentials allowedCredentials) {
-
-		LiteListener listener = new LiteListener(manager, listenPort, allowedCredentials);
-		int boundPort = listener.getListenPort();
-		Thread thread = new Thread(listener);
-		thread.start();
-		return boundPort;
-
+	private void startCBLListener(int listenPort, Manager manager, Credentials allowedCredentials) {
+		listener = new LiteListener(manager, listenPort, allowedCredentials);
+		listenerThread = new Thread(listener);
+		listenerThread.start();
 	}
 
 	public void onResume(boolean multitasking) {
