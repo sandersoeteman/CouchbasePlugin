@@ -3,6 +3,7 @@ package net.pictoplanner.plugin;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.AssetManager;
 
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaPlugin;
@@ -27,6 +28,7 @@ import com.couchbase.lite.router.URLStreamHandlerFactory;
 import com.couchbase.lite.util.Log;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -805,7 +807,6 @@ public class PlanbordCouch extends CordovaPlugin {
 	private String setup() throws CouchbaseLiteException, IOException {
 		
 		Database dbUser = manager.getDatabase("planbord_user");
-		Database dbApp = manager.getDatabase("app");
 		
 		View viewUsers = dbUser.getView("planbord_user/allUsers");
 		viewUsers.setMap(new Mapper() {
@@ -818,6 +819,30 @@ public class PlanbordCouch extends CordovaPlugin {
 		    	}
 		    }
 		}, Float.toString(VERSION));
+		
+		Database dbApp = manager.getDatabase("app");
+		String address = "https://db.pictoplanner.net/android-app-test";
+		URL url = new URL(address);
+		
+		Replication pull = dbApp.createPullReplication(url);
+		pull.setContinuous(false);
+		pull.start();
+		
+//		Database dbApp = manager.getExistingDatabase("app");
+//		if(dbApp == null) {
+//            AssetManager assets = this.cordova.getActivity().getAssets();
+//            InputStream cannedDb = assets.open("app.cblite");
+//            String attsFolder = "couchtalk attachments";
+//            HashMap<String, InputStream> cannedAtts = new HashMap<String, InputStream>();
+//            for (String attName : assets.list(attsFolder)) {
+//                InputStream att = assets.open(String.format("%s/%s", attsFolder, attName));
+//                cannedAtts.put(attName.toLowerCase(), att);
+//            }
+//            manager.replaceDatabase("app", cannedDb, cannedAtts);
+//            
+//            // HACK: intentionally may remain `null` so app crashes instead of silent trouble…
+//            dbApp = manager.getExistingDatabase("app");
+//		}
 		
 		View viewApp = dbApp.getView("app/allClients");
 		viewApp.setMap(new Mapper() {
