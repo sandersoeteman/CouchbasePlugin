@@ -887,14 +887,14 @@ public class PlanbordCouch extends CordovaPlugin {
 		    Manager.enableLogging(Log.TAG, Log.DEBUG);
 			Manager.enableLogging(Log.TAG_SYNC, Log.ERROR);
 			Manager.enableLogging(Log.TAG_QUERY, Log.VERBOSE);
-			Manager.enableLogging(Log.TAG_VIEW, Log.VERBOSE);
+			Manager.enableLogging(Log.TAG_VIEW, Log.ERROR);
 			Manager.enableLogging(Log.TAG_CHANGE_TRACKER, Log.ERROR);
-			Manager.enableLogging(Log.TAG_BLOB_STORE, Log.ERROR);
-			Manager.enableLogging(Log.TAG_DATABASE, Log.VERBOSE);
-			Manager.enableLogging(Log.TAG_LISTENER, Log.VERBOSE);
+			Manager.enableLogging(Log.TAG_BLOB_STORE, Log.DEBUG);
+			Manager.enableLogging(Log.TAG_DATABASE, Log.DEBUG);
+			Manager.enableLogging(Log.TAG_LISTENER, Log.DEBUG);
 			Manager.enableLogging(Log.TAG_MULTI_STREAM_WRITER, Log.ERROR);
 			Manager.enableLogging(Log.TAG_REMOTE_REQUEST, Log.VERBOSE);
-			Manager.enableLogging(Log.TAG_ROUTER, Log.ERROR);
+			Manager.enableLogging(Log.TAG_ROUTER, Log.DEBUG);
 			manager = new Manager(new AndroidContext(context), Manager.DEFAULT_OPTIONS);
 			
 		} catch (IOException e) {
