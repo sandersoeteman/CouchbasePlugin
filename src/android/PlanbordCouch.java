@@ -825,7 +825,7 @@ public class PlanbordCouch extends CordovaPlugin {
 		URL url = new URL(address);
 		
 		Replication pull = dbApp.createPullReplication(url);
-		pull.setContinuous(false);
+		pull.setContinuous(true);
 		pull.start();
 		
 //		Database dbApp = manager.getExistingDatabase("app");
