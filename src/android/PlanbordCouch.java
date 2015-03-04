@@ -48,6 +48,7 @@ public class PlanbordCouch extends CordovaPlugin {
 	private static final int LEFT_EXTENT_PERIOD = 60;
 	private static final int RIGHT_EXTENT_PERIOD = 540;
 	private static final float VERSION = 1.10f;
+	private static final String TAG = "PlanbordCouch";
 	private static final String USERNAME = "USERNAME";
 	private static final String PASSWORD = "PASSWORD";
 	private static final String COMPACTION_DATE = "COMPACTION_DATE";
@@ -74,22 +75,23 @@ public class PlanbordCouch extends CordovaPlugin {
 
 		super.initialize(cordova, webView);
 		initCBLite();
-
 	}
 
 	private void initCBLite() {
 		try {
-
+			Log.d(TAG, "1");
 		    allowedCredentials = new Credentials();
-
+			Log.d(TAG, "2");
 			URLStreamHandlerFactory.registerSelfIgnoreError();
-
+			Log.d(TAG, "3");
 			manager = startCBLite(this.cordova.getActivity());
+			Log.d(TAG, "4: " + manager.toString());
 			dbUsers = manager.getDatabase("planbord_user");
+			Log.d(TAG, "5: " + dbUsers.getName());
 			dbApp = manager.getDatabase("app");
-
+			Log.d(TAG, "6: " + dbApp.getName());
 			startCBLListener(DEFAULT_LISTEN_PORT, manager, allowedCredentials);
-			
+			Log.d(TAG, "7: " + listener.getListenPort());
 			// TODO CORS dingen hier implementeren??
 			
 			System.out.println("initCBLite() completed successfully");
@@ -99,6 +101,107 @@ public class PlanbordCouch extends CordovaPlugin {
 			initFailed = true;
 		}
 
+	}
+
+
+	protected Manager startCBLite(Context context) {
+		Manager manager;
+		try {
+		    Manager.enableLogging(Log.TAG, Log.DEBUG);
+			Manager.enableLogging(Log.TAG_SYNC, Log.ERROR);
+			Manager.enableLogging(Log.TAG_QUERY, Log.VERBOSE);
+			Manager.enableLogging(Log.TAG_VIEW, Log.ERROR);
+			Manager.enableLogging(Log.TAG_CHANGE_TRACKER, Log.ERROR);
+			Manager.enableLogging(Log.TAG_BLOB_STORE, Log.DEBUG);
+			Manager.enableLogging(Log.TAG_DATABASE, Log.DEBUG);
+			Manager.enableLogging(Log.TAG_LISTENER, Log.DEBUG);
+			Manager.enableLogging(Log.TAG_MULTI_STREAM_WRITER, Log.ERROR);
+			Manager.enableLogging(Log.TAG_REMOTE_REQUEST, Log.VERBOSE);
+			Manager.enableLogging(Log.TAG_ROUTER, Log.DEBUG);
+			manager = new Manager(new AndroidContext(context), Manager.DEFAULT_OPTIONS);
+			
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+		return manager;
+	}
+
+
+	private void startCBLListener(int listenPort, Manager manager, Credentials allowedCredentials) {
+		listener = new LiteListener(manager, listenPort, allowedCredentials);
+		listenerThread = new Thread(listener);
+		listenerThread.start();
+	}
+
+
+	private String setup() throws CouchbaseLiteException, IOException {
+		
+		View viewUsers = dbUsers.getView("planbord_user/allUsers");
+		viewUsers.setMap(new Mapper() {
+		    @Override
+		    public void map(Map<String, Object> document, Emitter emitter) {
+		    	String type = (String) document.get("type");
+		    	if(type != null && type.equals("user")) {
+		    		Integer gebruikerID = (Integer) document.get("GebruikerID");
+		    		emitter.emit(gebruikerID, document);
+		    	}
+		    }
+		}, Float.toString(VERSION));
+		
+		
+		String address = "https://db.pictoplanner.net/android-app-test";
+		URL url = new URL(address);
+		
+		Replication pull = dbApp.createPullReplication(url);
+		pull.setContinuous(true);
+		pull.start();
+		
+//		Database dbApp = manager.getExistingDatabase("app");
+//		if(dbApp == null) {
+//            AssetManager assets = this.cordova.getActivity().getAssets();
+//            InputStream cannedDb = assets.open("app.cblite");
+//            String attsFolder = "couchtalk attachments";
+//            HashMap<String, InputStream> cannedAtts = new HashMap<String, InputStream>();
+//            for (String attName : assets.list(attsFolder)) {
+//                InputStream att = assets.open(String.format("%s/%s", attsFolder, attName));
+//                cannedAtts.put(attName.toLowerCase(), att);
+//            }
+//            manager.replaceDatabase("app", cannedDb, cannedAtts);
+//            
+//            // HACK: intentionally may remain `null` so app crashes instead of silent trouble…
+//            dbApp = manager.getExistingDatabase("app");
+//		}
+		
+		View viewApp = dbApp.getView("app/allClients");
+		viewApp.setMap(new Mapper() {
+		    @Override
+		    public void map(Map<String, Object> document, Emitter emitter) {
+		    	String type = (String) document.get("type");
+		    	if(type != null && type.equals("user")) {
+		    		Integer gebruikerID = (Integer) document.get("GebruikerID");
+		    		emitter.emit(gebruikerID, document);
+		    	}
+		    }
+		}, Float.toString(VERSION));
+		
+		View viewVersionDoc = dbApp.getView("app/allVersionDocs");
+		viewVersionDoc.setMap(new Mapper() {
+		    @Override
+		    public void map(Map<String, Object> document, Emitter emitter) {
+		    	String type = (String) document.get("type");
+		    	if(type != null && type.equals("version")) {
+		    		String id = (String) document.get("_id");
+		    		emitter.emit(id, document);
+		    	}
+		    }
+		}, Float.toString(VERSION));
+		
+		return String.format(
+				"http://%s:%s@localhost:%d/",
+                allowedCredentials.getLogin(),
+                allowedCredentials.getPassword(),
+                listener.getListenPort()
+        );
 	}
 
 	@Override
@@ -810,104 +913,7 @@ public class PlanbordCouch extends CordovaPlugin {
 		editor.putString(COMPACTION_DATE, format.format(date));
 	    editor.commit();
 	}
-	
-	private String setup() throws CouchbaseLiteException, IOException {
-		
-		View viewUsers = dbUsers.getView("planbord_user/allUsers");
-		viewUsers.setMap(new Mapper() {
-		    @Override
-		    public void map(Map<String, Object> document, Emitter emitter) {
-		    	String type = (String) document.get("type");
-		    	if(type != null && type.equals("user")) {
-		    		Integer gebruikerID = (Integer) document.get("GebruikerID");
-		    		emitter.emit(gebruikerID, document);
-		    	}
-		    }
-		}, Float.toString(VERSION));
-		
-		
-		String address = "https://db.pictoplanner.net/android-app-test";
-		URL url = new URL(address);
-		
-		Replication pull = dbApp.createPullReplication(url);
-		pull.setContinuous(true);
-		pull.start();
-		
-//		Database dbApp = manager.getExistingDatabase("app");
-//		if(dbApp == null) {
-//            AssetManager assets = this.cordova.getActivity().getAssets();
-//            InputStream cannedDb = assets.open("app.cblite");
-//            String attsFolder = "couchtalk attachments";
-//            HashMap<String, InputStream> cannedAtts = new HashMap<String, InputStream>();
-//            for (String attName : assets.list(attsFolder)) {
-//                InputStream att = assets.open(String.format("%s/%s", attsFolder, attName));
-//                cannedAtts.put(attName.toLowerCase(), att);
-//            }
-//            manager.replaceDatabase("app", cannedDb, cannedAtts);
-//            
-//            // HACK: intentionally may remain `null` so app crashes instead of silent trouble…
-//            dbApp = manager.getExistingDatabase("app");
-//		}
-		
-		View viewApp = dbApp.getView("app/allClients");
-		viewApp.setMap(new Mapper() {
-		    @Override
-		    public void map(Map<String, Object> document, Emitter emitter) {
-		    	String type = (String) document.get("type");
-		    	if(type != null && type.equals("user")) {
-		    		Integer gebruikerID = (Integer) document.get("GebruikerID");
-		    		emitter.emit(gebruikerID, document);
-		    	}
-		    }
-		}, Float.toString(VERSION));
-		
-		View viewVersionDoc = dbApp.getView("app/allVersionDocs");
-		viewVersionDoc.setMap(new Mapper() {
-		    @Override
-		    public void map(Map<String, Object> document, Emitter emitter) {
-		    	String type = (String) document.get("type");
-		    	if(type != null && type.equals("version")) {
-		    		String id = (String) document.get("_id");
-		    		emitter.emit(id, document);
-		    	}
-		    }
-		}, Float.toString(VERSION));
-		
-		return String.format(
-				"http://%s:%s@localhost:%d/",
-                allowedCredentials.getLogin(),
-                allowedCredentials.getPassword(),
-                listener.getListenPort()
-        );
-	}
 
-	protected Manager startCBLite(Context context) {
-		Manager manager;
-		try {
-		    Manager.enableLogging(Log.TAG, Log.DEBUG);
-			Manager.enableLogging(Log.TAG_SYNC, Log.ERROR);
-			Manager.enableLogging(Log.TAG_QUERY, Log.VERBOSE);
-			Manager.enableLogging(Log.TAG_VIEW, Log.ERROR);
-			Manager.enableLogging(Log.TAG_CHANGE_TRACKER, Log.ERROR);
-			Manager.enableLogging(Log.TAG_BLOB_STORE, Log.DEBUG);
-			Manager.enableLogging(Log.TAG_DATABASE, Log.DEBUG);
-			Manager.enableLogging(Log.TAG_LISTENER, Log.DEBUG);
-			Manager.enableLogging(Log.TAG_MULTI_STREAM_WRITER, Log.ERROR);
-			Manager.enableLogging(Log.TAG_REMOTE_REQUEST, Log.VERBOSE);
-			Manager.enableLogging(Log.TAG_ROUTER, Log.DEBUG);
-			manager = new Manager(new AndroidContext(context), Manager.DEFAULT_OPTIONS);
-			
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
-		return manager;
-	}
-
-	private void startCBLListener(int listenPort, Manager manager, Credentials allowedCredentials) {
-		listener = new LiteListener(manager, listenPort, allowedCredentials);
-		listenerThread = new Thread(listener);
-		listenerThread.start();
-	}
 
 	public void onResume(boolean multitasking) {
 		System.out.println("CBLite.onResume() called");
