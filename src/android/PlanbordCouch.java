@@ -79,19 +79,12 @@ public class PlanbordCouch extends CordovaPlugin {
 
 	private void initCBLite() {
 		try {
-			Log.d(TAG, "1");
 		    allowedCredentials = new Credentials();
-			Log.d(TAG, "2");
 			URLStreamHandlerFactory.registerSelfIgnoreError();
-			Log.d(TAG, "3");
 			manager = startCBLite(this.cordova.getActivity());
-			Log.d(TAG, "4: " + manager.toString());
 			dbUsers = manager.getDatabase("planbord_user");
-			Log.d(TAG, "5: " + dbUsers.getName());
 			dbApp = manager.getDatabase("app");
-			Log.d(TAG, "6: " + dbApp.getName());
 			startCBLListener(DEFAULT_LISTEN_PORT, manager, allowedCredentials);
-			Log.d(TAG, "7: " + listener.getListenPort());
 			// TODO CORS dingen hier implementeren??
 			
 			System.out.println("initCBLite() completed successfully");
