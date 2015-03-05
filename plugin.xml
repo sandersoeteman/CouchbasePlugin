@@ -25,6 +25,10 @@
         <param name="onload" value="true"/>
       </feature>
     </config-file>
+
+    <config-file target="AndroidManifest.xml" parent="/manifest">
+        <uses-permission android:name="android.permission.INTERNET" />
+    </config-file>
     
     <source-file target-dir="libs" src="lib/android/cbl_collator_so-1.0.3.1.jar"/>
     <source-file target-dir="libs" src="lib/android/couchbase-lite-android-1.0.3.1.aar"/>
