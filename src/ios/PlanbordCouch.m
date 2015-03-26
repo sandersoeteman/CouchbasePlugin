@@ -246,6 +246,10 @@
     CDVPluginResult* pluginResult = nil;
     
     @try {
+        if ([UIApplication instancesRespondToSelector:@selector(registerUserNotificationSettings:)]){
+            [application registerUserNotificationSettings:[UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeAlert|UIUserNotificationTypeBadge|UIUserNotificationTypeSound categories:nil]];
+        }
+        
         [self cancelNotifications];
 
         QueryResult* result = [touchDB getNextActivities:32];
