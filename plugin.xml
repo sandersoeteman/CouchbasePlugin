@@ -50,7 +50,10 @@
     <source-file src="src/android/ImagesFilter.java" target-dir="src/net/pictoplanner/plugin" />
     <source-file src="src/android/PlanningFilter.java" target-dir="src/net/pictoplanner/plugin" />
 
+    <asset src="www/resources/sound/alert.mp3" target="resources/sound/alert.mp3" />
+    <asset src="www/resources/sound/reminder.mp3" target="resources/sound/reminder.mp3" />
   </platform>
+
 
   <platform name="ios">
     <config-file target="config.xml" parent="/*/plugins">
@@ -117,6 +120,9 @@
 
     <header-file src="src/ios/SSKeychainQuery.h" />
     <source-file src="src/ios/SSKeychainQuery.m" />
+
+    <asset src="www/resources/sound/alert.mp3" target="resources/sound/alert.mp3" />
+    <asset src="www/resources/sound/reminder.mp3" target="resources/sound/reminder.mp3" />
   </platform>
 
  
